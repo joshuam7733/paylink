@@ -1,0 +1,165 @@
+/* =====================================================================
+   PAYLINK DESIGN TOKENS — v0.2 (logo B, emerald-on-navy actions, account-level demo mode)
+   Single source of truth for colour, type, spacing, radius, shadow and
+   motion. Every future phase imports this file (or tokens.json).
+   ===================================================================== */
+
+:root {
+  /* ---------- 1. Brand primaries (exactly three) ---------- */
+  --pl-navy: #142B45;      /* Deep Navy: trust, structure, headings        */
+  --pl-emerald: #10A88A;   /* Paylink Emerald: actions, positive states    */
+  --pl-cloud: #F7F9FC;     /* Soft Cloud: foundation, backgrounds, space   */
+
+  /* ---------- 2. Supporting scales (derived from the primaries) ---------- */
+  /* Navy-tinted neutrals: text, borders, surfaces */
+  --pl-navy-950: #0B1726;
+  --pl-navy-900: #0F2138;
+  --pl-navy-700: #233D5C;
+  --pl-slate-600: #4A5F78;   /* secondary text   6.2:1 on cloud */
+  --pl-slate-500: #5B6E85;   /* tertiary text    5.0:1 on cloud */
+  --pl-slate-300: #B4C2D3;
+  --pl-line: #DCE3EC;        /* default border */
+  --pl-line-soft: #E8EDF3;   /* dividers, table rules */
+  --pl-white: #FFFFFF;       /* raised surface (cards, inputs) */
+
+  /* Emerald tints: never a second accent, only lighter/darker emerald */
+  --pl-emerald-50: #E7F6F2;
+  --pl-emerald-100: #C8EDE3;
+  --pl-emerald-700: #08745F; /* emerald TEXT on light surfaces (5.1:1 on emerald-50) */
+
+  /* Semantic support colours (used sparingly, never decoratively) */
+  --pl-danger: #B23A33;      --pl-danger-bg: #FCEDEC;
+  --pl-warning: #9A5B00;     --pl-warning-bg: #FFF4E0;   /* also: DEMO */
+  --pl-info: #2B5C8A;        --pl-info-bg: #EAF1F8;
+
+  /* ---------- 3. Semantic roles (components use THESE, not raw hex) ---------- */
+  --color-bg: var(--pl-cloud);
+  --color-surface: var(--pl-white);
+  --color-surface-sunken: #EEF2F7;
+  --color-text: var(--pl-navy);
+  --color-text-secondary: var(--pl-slate-600);
+  --color-text-tertiary: var(--pl-slate-500);
+  --color-border: var(--pl-line);
+  --color-border-soft: var(--pl-line-soft);
+  /* Primary action: navy fill, emerald label (4.78:1 AA). Hover DARKENS (5.4:1); never lighten. */
+  --color-action: var(--pl-navy);
+  --color-action-hover: var(--pl-navy-900);
+  --color-action-pressed: var(--pl-navy-950);
+  --color-on-action: var(--pl-emerald);
+  /* Inverse action: for buttons placed on navy surfaces */
+  --color-action-inverse: var(--pl-emerald);
+  --color-action-inverse-hover: #1FB596;
+  --color-on-action-inverse: var(--pl-navy);
+  --color-accent: var(--pl-emerald);   /* focus rings, progress, active nav bar */
+  --color-link: var(--pl-emerald-700);
+  --color-strong-surface: var(--pl-navy);
+  --color-on-strong: var(--pl-cloud);
+  --color-focus: rgba(16, 168, 138, 0.40);
+
+  /* Transaction status roles */
+  --status-pending-fg: var(--pl-info);        --status-pending-bg: var(--pl-info-bg);
+  --status-secured-fg: var(--pl-emerald-700); --status-secured-bg: var(--pl-emerald-50);
+  --status-completed-fg: var(--pl-navy);      --status-completed-bg: var(--pl-emerald);
+  --status-failed-fg: var(--pl-danger);       --status-failed-bg: var(--pl-danger-bg);
+  --status-cancelled-fg: var(--pl-slate-600); --status-cancelled-bg: #EEF2F7;
+  /* Demo mode is signalled at account level (bar + avatar badge), not per status */
+  --demo-fg: var(--pl-warning);   --demo-bg: var(--pl-warning-bg);   --demo-border: #F1DDB8;
+
+  /* ---------- 4. Typography ---------- */
+  --font-display: "Bricolage Grotesque", "Instrument Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-body: "Instrument Sans", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* size / line-height pairs (mobile-first; display steps grow at >=768px) */
+  --text-display: 2.5rem;  --leading-display: 1.05;  /* 40 -> 56 desktop */
+  --text-h1: 2rem;         --leading-h1: 1.12;       /* 32 -> 40 */
+  --text-h2: 1.5rem;       --leading-h2: 1.2;        /* 24 -> 28 */
+  --text-h3: 1.25rem;      --leading-h3: 1.3;        /* 20 */
+  --text-h4: 1.0625rem;    --leading-h4: 1.4;        /* 17 */
+  --text-body-lg: 1.0625rem; --leading-body-lg: 1.55;
+  --text-body: 0.9375rem;  --leading-body: 1.5;      /* 15 */
+  --text-input: 1rem;                                /* 16: stops iOS zoom */
+  --text-sm: 0.8125rem;    --leading-sm: 1.4;        /* 13 */
+  --text-overline: 0.6875rem;                        /* 11, uppercase, +0.08em */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+  --tracking-overline: 0.08em;
+
+  /* ---------- 5. Spacing (4px base) ---------- */
+  --space-0: 0;     --space-0-5: 2px;  --space-1: 4px;   --space-2: 8px;
+  --space-3: 12px;  --space-4: 16px;   --space-5: 20px;  --space-6: 24px;
+  --space-8: 32px;  --space-10: 40px;  --space-12: 48px; --space-16: 64px;
+  --space-20: 80px; --space-24: 96px;
+
+  /* ---------- 6. Radius ---------- */
+  --radius-xs: 4px;    /* tags inside dense tables */
+  --radius-sm: 8px;    /* small buttons, chips */
+  --radius-md: 10px;   /* buttons, inputs */
+  --radius-lg: 14px;   /* cards, panels */
+  --radius-xl: 20px;   /* modals, bottom sheets, checkout card */
+  --radius-full: 999px;/* status pills, avatars */
+
+  /* ---------- 7. Elevation: border first, shadow only for floating layers ---------- */
+  --shadow-xs: 0 1px 2px rgba(20, 43, 69, 0.06);
+  --shadow-sm: 0 2px 6px -1px rgba(20, 43, 69, 0.08), 0 1px 2px rgba(20, 43, 69, 0.05);
+  --shadow-md: 0 8px 24px -8px rgba(20, 43, 69, 0.16), 0 2px 6px -2px rgba(20, 43, 69, 0.06);
+  --shadow-lg: 0 24px 48px -16px rgba(20, 43, 69, 0.24);
+  --ring-focus: 0 0 0 3px var(--color-focus);
+
+  /* ---------- 8. Motion ---------- */
+  --dur-instant: 80ms;   /* press feedback */
+  --dur-fast: 140ms;     /* hover, colour changes */
+  --dur-base: 220ms;     /* dropdowns, toasts, tab switches */
+  --dur-slow: 360ms;     /* modals, sheets, page transitions */
+  --dur-status: 600ms;   /* transaction status change (one per event) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  /* Motion for React equivalents:
+     spring = { type: "spring", stiffness: 420, damping: 34, mass: 0.9 }
+     out    = { duration: 0.22, ease: [0.22, 1, 0.36, 1] } */
+
+  /* ---------- 9. Layout ---------- */
+  --container-max: 1200px;
+  --content-max: 680px;      /* forms, checkout */
+  --sidebar-w: 248px;
+  --tap-min: 44px;           /* minimum touch target */
+  /* breakpoints (use in media queries): sm 640, md 768, lg 1024, xl 1280 */
+}
+
+/* Dark theme: defined now so later phases inherit it. MVP ships light-first. */
+[data-theme="dark"] {
+  --color-bg: var(--pl-navy-950);
+  --color-surface: var(--pl-navy-900);
+  --color-surface-sunken: #0A1422;
+  --color-text: var(--pl-cloud);
+  --color-text-secondary: var(--pl-slate-300);
+  --color-text-tertiary: #93A4B8;
+  --color-border: #22395A;
+  --color-border-soft: #1A2F4B;
+  --color-link: #3CC9AA;
+  --color-strong-surface: var(--pl-navy);
+  /* navy buttons vanish on dark navy, so dark theme uses the inverse */
+  --color-action: var(--pl-emerald);
+  --color-action-hover: #1FB596;
+  --color-action-pressed: #0FA084;
+  --color-on-action: var(--pl-navy);
+  --status-secured-fg: #3CC9AA;   --status-secured-bg: rgba(16, 168, 138, 0.14);
+  --status-pending-fg: #8DB8E2;   --status-pending-bg: rgba(43, 92, 138, 0.28);
+  --status-failed-fg: #F08A84;    --status-failed-bg: rgba(194, 65, 58, 0.18);
+  --status-cancelled-fg: var(--pl-slate-300); --status-cancelled-bg: rgba(180, 194, 211, 0.10);
+  --demo-fg: #F2B65A;   --demo-bg: rgba(242, 182, 90, 0.14);   --demo-border: rgba(242, 182, 90, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms; --dur-fast: 0ms; --dur-base: 0ms;
+    --dur-slow: 0ms; --dur-status: 0ms;
+  }
+}

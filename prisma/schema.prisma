@@ -1,0 +1,196 @@
+// Paylink Phase 1 schema.
+// SQLite for local development; the schema avoids SQLite-only features so it can move to
+// PostgreSQL by changing `provider` and generating a fresh baseline migration (see docs/DATABASE.md).
+// Enum-like columns are stored as strings and validated in src/lib/domain/constants.ts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String
+  name              String
+  phone             String?
+  /// SELLER | BUYER | ADMIN
+  role              String
+  /// ACTIVE | SUSPENDED
+  status            String    @default("ACTIVE")
+  /// Phase 1: every account is a demo account. Real-money accounts come with a licensed provider.
+  isDemo            Boolean   @default(true)
+  demoWelcomeSeenAt DateTime?
+  lastLoginAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  sellerProfile SellerProfile?
+  sessions      Session[]
+  resetTokens   PasswordResetToken[]
+  sales         Transaction[]        @relation("SellerTransactions")
+  purchases     Transaction[]        @relation("BuyerTransactions")
+
+  @@index([role])
+  @@index([createdAt])
+}
+
+model SellerProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName String
+  location     String?
+  phone        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Session {
+  /// SHA-256 hash of the session token. The raw token only ever lives in the user's cookie.
+  id         String   @id
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  userAgent  String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  /// SHA-256 hash of the reset token sent by email.
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Transaction {
+  id                String    @id @default(cuid())
+  /// Human-readable reference shown to both parties, e.g. PL-7QK2M9
+  reference         String    @unique
+  sellerId          String
+  seller            User      @relation("SellerTransactions", fields: [sellerId], references: [id], onDelete: Restrict)
+  /// Set when a signed-in buyer pays. Guest buyers are identified by buyerAccessHash.
+  buyerId           String?
+  buyer             User?     @relation("BuyerTransactions", fields: [buyerId], references: [id], onDelete: SetNull)
+  buyerName         String?
+  buyerPhone        String?
+  buyerEmail        String?
+  /// SHA-256 hash of the guest buyer's tracking key.
+  buyerAccessHash   String?
+
+  itemName          String
+  description       String
+  quantity          Int       @default(1)
+  /// Whole Uganda shillings. UGX has no minor unit in everyday use.
+  amount            Int
+  currency          String    @default("UGX")
+
+  /// SELLER_DELIVERS | BUYER_COLLECTS | COURIER
+  deliveryMethod    String
+  deliveryArea      String?
+  deliveryTimeframe String?
+  deliveryNotes     String?
+
+  /// PENDING | FUNDS_SECURED_DEMO | PAYMENT_FAILED | CANCELLED | COMPLETED
+  status            String    @default("PENDING")
+  isDemo            Boolean   @default(true)
+
+  securedAt         DateTime?
+  deliveredAt       DateTime?
+  completedAt       DateTime?
+  cancelledAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  paymentLink     PaymentLink?
+  paymentAttempts PaymentAttempt[]
+  events          TransactionEvent[]
+
+  @@index([sellerId, status])
+  @@index([sellerId, createdAt])
+  @@index([buyerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PaymentLink {
+  id            String      @id @default(cuid())
+  /// Unguessable public identifier used in /pay/{slug}
+  slug          String      @unique
+  transactionId String      @unique
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  expiresAt     DateTime?
+  disabledAt    DateTime?
+  openCount     Int         @default(0)
+  firstOpenedAt DateTime?
+  lastOpenedAt  DateTime?
+  createdAt     DateTime    @default(now())
+}
+
+model PaymentAttempt {
+  id                String      @id @default(cuid())
+  transactionId     String
+  transaction       Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  /// DEMO in Phase 1. Real providers are added behind the same interface later.
+  provider          String      @default("DEMO")
+  /// MTN_MOMO | AIRTEL_MONEY
+  method            String
+  payerName         String
+  payerPhone        String
+  amount            Int
+  currency          String      @default("UGX")
+  /// INITIATED | SUCCEEDED | FAILED | CANCELLED
+  status            String      @default("INITIATED")
+  /// SUCCESS | FAILURE | CANCEL (only meaningful for the DEMO provider)
+  simulatedOutcome  String?
+  failureReason     String?
+  providerReference String?
+  createdAt         DateTime    @default(now())
+  completedAt       DateTime?
+
+  @@index([transactionId])
+}
+
+model TransactionEvent {
+  id            String      @id @default(cuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  /// See EVENT_TYPES in src/lib/domain/constants.ts
+  type          String
+  /// SELLER | BUYER | ADMIN | SYSTEM
+  actorType     String
+  actorId       String?
+  fromStatus    String?
+  toStatus      String?
+  message       String
+  /// JSON-encoded extra data
+  metadata      String?
+  createdAt     DateTime    @default(now())
+
+  @@index([transactionId, createdAt])
+  @@index([createdAt])
+}
+
+/// Development outbox. Emails (e.g. password resets) are stored here instead of being sent,
+/// until an email provider is configured.
+model DevEmail {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  body      String
+  createdAt DateTime @default(now())
+}

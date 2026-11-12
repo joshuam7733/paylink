@@ -1,0 +1,1310 @@
+<meta charset="utf-8">
+<title>Paylink Brand System</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@500;700&family=Manrope:wght@500;700&display=swap">
+<style>
+/* Layout concept: a brand book on Soft Cloud. Navy carries structure (section bands, sidebars),
+   Emerald appears only where something can be pressed or has gone right. Product mockups sit
+   in device frames with their own fixed light tokens (--u-*), the theme the MVP ships in. */
+:root{
+  --navy:#142B45; --emerald:#10A88A; --cloud:#F7F9FC;
+  --bg:#F7F9FC; --surface:#FFFFFF; --sunken:#EEF2F7;
+  --ink:#142B45; --ink-2:#4A5F78; --ink-3:#5B6E85;
+  --line:#DCE3EC; --line-soft:#E8EDF3;
+  --accent:#10A88A; --accent-ink:#08745F; --accent-tint:#E7F6F2; --on-accent:#142B45;
+  --panel:#142B45; --on-panel:#F7F9FC; --on-panel-2:#B4C2D3; --panel-line:#2A4566;
+  --m1:#142B45; --m2:#10A88A;
+  --warn:#9A5B00; --warn-bg:#FFF4E0; --danger:#B23A33; --danger-bg:#FCEDEC; --info:#2B5C8A; --info-bg:#EAF1F8;
+  --frame:#DDE4ED; --frame-bar:#EBF0F6;
+  /* product mock tokens: fixed light, the MVP's theme */
+  --u-bg:#F7F9FC; --u-surface:#FFFFFF; --u-sunken:#EEF2F7; --u-ink:#142B45; --u-ink2:#4A5F78; --u-ink3:#5B6E85;
+  --u-line:#DCE3EC; --u-line-soft:#E8EDF3; --u-em:#10A88A; --u-em-hover:#1FB596; --u-em-ink:#08745F; --u-em-tint:#E7F6F2;
+  --u-navy:#142B45; --u-navy-2:#233D5C; --u-cloud:#F7F9FC; --u-slate-300:#B4C2D3;
+  --u-danger:#B23A33; --u-danger-bg:#FCEDEC; --u-warn:#9A5B00; --u-warn-bg:#FFF4E0; --u-info:#2B5C8A; --u-info-bg:#EAF1F8;
+  --font-display:"Bricolage Grotesque","Instrument Sans",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  --font-body:"Instrument Sans",ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --dur-instant:80ms; --dur-fast:140ms; --dur-base:220ms; --dur-slow:360ms; --dur-status:600ms;
+  --ease-out:cubic-bezier(.22,1,.36,1); --ease-in-out:cubic-bezier(.65,0,.35,1);
+  --shadow-md:0 8px 24px -8px rgba(20,43,69,.16),0 2px 6px -2px rgba(20,43,69,.06);
+  --shadow-lg:0 24px 48px -16px rgba(20,43,69,.24);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1726; --surface:#0F2138; --sunken:#0A1422; --ink:#F7F9FC; --ink-2:#B4C2D3; --ink-3:#93A4B8;
+  --line:#22395A; --line-soft:#1A2F4B; --accent-ink:#3CC9AA; --accent-tint:rgba(16,168,138,.14);
+  --panel:#142B45; --panel-line:#2A4566; --m1:#F7F9FC;
+  --warn:#F2B65A; --warn-bg:rgba(242,182,90,.14); --danger:#F08A84; --danger-bg:rgba(194,65,58,.18); --info:#8DB8E2; --info-bg:rgba(43,92,138,.28);
+  --frame:#1E3453; --frame-bar:#172B46; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0B1726; --surface:#0F2138; --sunken:#0A1422; --ink:#F7F9FC; --ink-2:#B4C2D3; --ink-3:#93A4B8;
+  --line:#22395A; --line-soft:#1A2F4B; --accent-ink:#3CC9AA; --accent-tint:rgba(16,168,138,.14);
+  --panel:#142B45; --panel-line:#2A4566; --m1:#F7F9FC;
+  --warn:#F2B65A; --warn-bg:rgba(242,182,90,.14); --danger:#F08A84; --danger-bg:rgba(194,65,58,.18); --info:#8DB8E2; --info-bg:rgba(43,92,138,.28);
+  --frame:#1E3453; --frame-bar:#172B46; color-scheme:dark }
+:root.rm{--dur-instant:0ms;--dur-fast:0ms;--dur-base:0ms;--dur-slow:0ms;--dur-status:0ms}
+@media (prefers-reduced-motion:reduce){:root{--dur-instant:0ms;--dur-fast:0ms;--dur-base:0ms;--dur-slow:0ms;--dur-status:0ms}}
+
+*{box-sizing:border-box}
+table{color:inherit;font-size:inherit;line-height:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:768px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:650;letter-spacing:-.02em;text-wrap:balance;margin:0;color:var(--ink)}
+p{margin:0}
+.mono{font-family:var(--font-mono);font-size:.86em}
+.tnum{font-variant-numeric:tabular-nums}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.top nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;justify-content:flex-end}
+.top nav::-webkit-scrollbar{display:none}
+.top nav a{color:var(--ink-2);text-decoration:none;font-weight:500;font-size:14px;padding:8px 10px;border-radius:8px;white-space:nowrap}
+.top nav a:hover{color:var(--ink);background:var(--sunken)}
+.lockup{display:inline-flex;align-items:center;gap:10px;color:var(--m1);text-decoration:none;flex:none}
+.lockup svg{width:30px;height:30px}
+.wm{font-family:var(--font-display);font-weight:700;letter-spacing:-.035em;font-size:23px;line-height:1;color:var(--m1);font-variation-settings:"opsz" 48}
+.wi{position:relative;display:inline-block}
+.wi::after{content:"";position:absolute;left:50%;top:.075em;width:.19em;height:.19em;border-radius:50%;background:var(--m2);transform:translateX(-52%)}
+
+/* hero */
+.hero{padding-block:56px 40px}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.review{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;border:1px solid var(--warn);color:var(--warn);background:var(--warn-bg);font:600 11px/1 var(--font-mono);letter-spacing:.04em;text-transform:uppercase}
+.hero h1{font-size:clamp(36px,6.4vw,76px);line-height:1.02;letter-spacing:-.035em;margin-top:18px;max-width:15ch;font-variation-settings:"opsz" 96}
+.hero h1 em{font-style:normal;color:var(--accent-ink)}
+.hero .lede{font-size:clamp(16px,1.6vw,19px);color:var(--ink-2);max-width:62ch;margin-top:20px}
+.traits{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.traits span{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--ink-2)}
+
+/* sections */
+.sec{padding-block:64px;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:12px;margin-bottom:36px;max-width:760px}
+.over{font:600 12px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+.sec-head h2{font-size:clamp(28px,3.6vw,42px);line-height:1.08}
+.sec-head p{color:var(--ink-2);font-size:16px;max-width:66ch}
+.sub{font-size:20px;margin:44px 0 16px;letter-spacing:-.015em}
+.note{font-size:13px;color:var(--ink-3)}
+.grid{display:grid;gap:20px}
+@media (min-width:900px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;min-width:0}
+
+/* logo concepts */
+.concept{display:flex;flex-direction:column;overflow:hidden}
+.concept.pick{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.stage{background:var(--cloud);--m1:#142B45;padding:36px 20px 28px;display:grid;place-items:center;gap:26px;border-bottom:1px solid var(--line);position:relative}
+.stage .big{width:120px;height:120px}
+.stage .lockup svg{width:40px;height:40px}
+.stage .lockup .wm{font-size:32px}
+.tag-pick{position:absolute;top:12px;right:12px;background:var(--emerald);color:var(--navy);font:600 11px/1 var(--font-body);letter-spacing:.06em;text-transform:uppercase;padding:6px 9px;border-radius:999px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.apps>div{display:grid;justify-items:center;align-content:center;gap:8px;padding:16px 4px;border-right:1px solid var(--line-soft);min-height:112px}
+.apps>div:last-child{border-right:0}
+.apps small{font-size:11px;color:var(--ink-3);text-align:center;line-height:1.25}
+.tile{width:52px;height:52px;border-radius:13px;background:var(--navy);display:grid;place-items:center;--m1:#F7F9FC;box-shadow:0 2px 6px -2px rgba(20,43,69,.3)}
+.tile svg{width:40px;height:40px}
+.tile.em{background:var(--emerald);--m1:#142B45;--m2:#F7F9FC}
+.avatar{width:52px;height:52px;border-radius:50%;background:var(--navy);display:grid;place-items:center;--m1:#F7F9FC}
+.avatar svg{width:34px;height:34px}
+.fav{display:flex;align-items:end;gap:8px;--m1:#142B45;background:#F7F9FC;padding:6px;border-radius:8px;border:1px solid var(--line)}
+.fav .dk{background:var(--navy);--m1:#F7F9FC;border-radius:4px;padding:3px;display:grid}
+.concept .body{padding:20px;display:grid;gap:12px;flex:1;align-content:start}
+.concept h3{font-size:21px}
+.concept .body p{color:var(--ink-2);font-size:14.5px}
+.pc{display:grid;gap:6px;font-size:13.5px;color:var(--ink-2);margin:0;padding:0;list-style:none}
+.pc li{display:flex;gap:8px;align-items:flex-start}
+.pc li svg{flex:none;width:16px;height:16px;margin-top:2px}
+.pc .y svg{color:var(--accent-ink)} .pc .n svg{color:var(--ink-3)}
+.tabs-demo{display:grid;gap:12px}
+.lockups{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.lk-cell{border:1px solid var(--line);border-radius:14px;min-height:170px;display:grid;place-items:center;align-content:center;gap:18px;padding:24px 16px}
+.lk-cell .lockup svg{width:40px;height:40px}.lk-cell .lockup .wm{font-size:32px}
+.lk-cell small{font-size:12px;color:#5B6E85}
+.stack{display:grid;justify-items:center;gap:10px;color:var(--m1)}
+.stack svg{width:56px;height:56px}.stack .wm{font-size:26px}
+.tabbar{display:flex;gap:2px;padding:8px 8px 0;border-radius:10px 10px 0 0;overflow-x:auto}
+.tabbar.l{background:#E3E8EF;--m1:#142B45} .tabbar.d{background:#0B1726;--m1:#F7F9FC}
+.btab{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px 8px 0 0;font-size:12.5px;white-space:nowrap;min-width:150px}
+.tabbar.l .btab{color:#4A5F78} .tabbar.l .btab.on{background:#FFFFFF;color:#142B45}
+.tabbar.d .btab{color:#93A4B8} .tabbar.d .btab.on{background:#142B45;color:#F7F9FC}
+.btab svg{width:16px;height:16px;flex:none}
+
+/* colour */
+.prim{display:grid;gap:14px}
+@media (min-width:900px){.prim{grid-template-columns:1.25fr 1fr 1fr}}
+.sw{border-radius:16px;padding:22px;min-height:240px;display:flex;flex-direction:column;justify-content:space-between;gap:28px;border:1px solid transparent}
+.sw.navy{background:#142B45;color:#F7F9FC}
+.sw.em{background:#10A88A;color:#142B45}
+.sw.em p,.sw.em dt,.sw.em .k{opacity:1}
+.sw.cl{background:#F7F9FC;color:#142B45;border-color:#DCE3EC}
+.sw .k{font:600 12px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.sw h3{color:inherit;font-size:30px;margin-top:10px}
+.sw p{font-size:14px;max-width:34ch;opacity:.92;margin-top:8px}
+.sw dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-family:var(--font-mono);font-size:12.5px}
+.sw dt{opacity:.7}.sw dd{margin:0}
+.ratio{display:flex;height:56px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:6px}
+.ratio div{display:flex;align-items:center;padding:0 14px;font:600 12px/1.2 var(--font-body)}
+.ramp{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.chip{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.chip i{display:block;height:54px;border-bottom:1px solid var(--line-soft)}
+.chip div{padding:8px 10px;display:grid;gap:2px}
+.chip b{font-size:12.5px;font-weight:600}
+.chip span{font:400 11.5px/1.3 var(--font-mono);color:var(--ink-3)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+table.t th{text-align:left;font:600 11px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:12px 14px;border-bottom:1px solid var(--line)}
+table.t td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.t tr:last-child td{border-bottom:0}
+.pair{display:inline-flex;align-items:center;justify-content:center;min-width:92px;height:30px;padding:0 10px;border-radius:8px;font-weight:600;font-size:13px}
+.ok{color:var(--accent-ink);font-weight:600}.no{color:var(--danger);font-weight:600}
+
+/* type */
+.spec{padding:28px;display:grid;gap:22px}
+.spec .disp{font-family:var(--font-display);font-size:clamp(40px,7vw,88px);line-height:.98;letter-spacing:-.04em;font-weight:650;font-variation-settings:"opsz" 96}
+.spec .glyphs{font-family:var(--font-display);font-size:clamp(20px,2.4vw,28px);color:var(--ink-2);letter-spacing:-.01em;word-break:break-all}
+.faces{display:grid;gap:16px}
+@media (min-width:900px){.faces{grid-template-columns:repeat(3,1fr)}}
+.face{padding:18px;display:grid;gap:8px;align-content:start}
+.face .nm{font:600 12px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.face .smp{font-size:30px;line-height:1.1;color:var(--ink)}
+.scale td:nth-child(2){color:var(--ink)}
+.alt{padding:18px;display:grid;gap:10px}
+.alt .smp{font-size:26px;line-height:1.15;letter-spacing:-.02em}
+
+/* ===== product UI kit (scoped .ui, fixed light) ===== */
+.ui{font-family:var(--font-body);color:var(--u-ink);background:var(--u-bg);--m1:#142B45;--m2:#10A88A;font-size:15px;line-height:1.5}
+.ui h1,.ui h2,.ui h3,.ui h4{color:var(--u-ink)}
+.ui .ic{width:20px;height:20px;flex:none}
+.ui .ic-s{width:16px;height:16px;flex:none}
+.kit{padding:22px;display:grid;gap:16px;align-content:start;border-radius:14px;border:1px solid var(--line);min-width:0}
+.kit>h4{font:600 11px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--u-ink3)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:10px;font:600 15px/1 var(--font-body);border:1px solid transparent;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),transform var(--dur-instant) var(--ease-out),box-shadow var(--dur-fast) var(--ease-out),color var(--dur-fast)}
+.btn:active:not([disabled]){transform:scale(.97)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(16,168,138,.42)}
+.btn-p{background:var(--u-navy);color:var(--u-em)}
+.btn-p:hover{background:#0F2138}
+.btn-p:active:not([disabled]){background:#0B1726}
+.btn-e{background:var(--u-em);color:var(--u-navy)}
+.btn-e:hover{background:var(--u-em-hover)}
+.btn-s{background:var(--u-surface);color:var(--u-ink);border-color:var(--u-line)}
+.btn-s:hover{border-color:var(--u-slate-300);background:#FBFCFE}
+.btn-n{background:var(--u-navy);color:var(--u-cloud)}
+.btn-n:hover{background:var(--u-navy-2)}
+.btn-q{background:transparent;color:var(--u-ink)}
+.btn-q:hover{background:var(--u-sunken)}
+.btn-d{background:var(--u-surface);color:var(--u-danger);border-color:#EBC3C0}
+.btn-d:hover{background:var(--u-danger-bg)}
+.btn-sm{height:36px;padding:0 12px;font-size:14px;border-radius:8px}
+.btn-lg{height:52px;padding:0 22px;font-size:16px;border-radius:12px}
+.btn-blk{width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rm .spin{animation-duration:2.4s}
+.field{display:grid;gap:6px;min-width:0}
+.field label,.lbl{font-size:13px;font-weight:600;color:var(--u-ink)}
+.field .hint{font-size:12.5px;color:var(--u-ink3)}
+.inp{height:44px;width:100%;border:1px solid var(--u-line);background:var(--u-surface);border-radius:10px;padding:0 12px;font:400 16px/1 var(--font-body);color:var(--u-ink);transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+textarea.inp{height:auto;min-height:84px;padding:10px 12px;line-height:1.45;resize:vertical}
+.inp::placeholder{color:#8797AB}
+.inp:hover{border-color:var(--u-slate-300)}
+.inp:focus{outline:none;border-color:var(--u-em);box-shadow:0 0 0 3px rgba(16,168,138,.28)}
+.inp.err{border-color:var(--u-danger)}
+.inp.err:focus{box-shadow:0 0 0 3px rgba(178,58,51,.2)}
+.ferr{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--u-danger);font-weight:500}
+.amt{display:flex;border:1px solid var(--u-line);border-radius:10px;background:var(--u-surface);overflow:hidden;transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.amt:focus-within{border-color:var(--u-em);box-shadow:0 0 0 3px rgba(16,168,138,.28)}
+.amt span{display:grid;place-items:center;padding:0 12px;background:var(--u-sunken);font:600 13px/1 var(--font-body);color:var(--u-ink2);border-right:1px solid var(--u-line)}
+.amt input{border:0;flex:1;min-width:0;height:44px;padding:0 12px;font:600 17px/1 var(--font-body);font-variant-numeric:tabular-nums;color:var(--u-ink);background:transparent}
+.amt input:focus{outline:none}
+.seg{display:flex;background:var(--u-sunken);border-radius:10px;padding:3px;gap:2px}
+.seg button{flex:1;height:36px;border:0;background:transparent;border-radius:8px;font:500 13.5px/1 var(--font-body);color:var(--u-ink2);cursor:pointer;transition:background var(--dur-fast),color var(--dur-fast);white-space:nowrap;padding:0 8px}
+.seg button[aria-pressed="true"]{background:var(--u-surface);color:var(--u-ink);font-weight:600;box-shadow:0 1px 2px rgba(20,43,69,.1)}
+.sel{appearance:none;background:var(--u-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%234A5F78' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:36px}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--u-ink2)}
+.chk input{accent-color:var(--u-em);width:18px;height:18px;margin:1px 0 0}
+.pill{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;font:600 12px/1 var(--font-body);white-space:nowrap}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.p-pend{color:var(--u-info);background:var(--u-info-bg)}
+.p-sec{color:var(--u-em-ink);background:var(--u-em-tint)}
+.p-done{color:var(--u-navy);background:var(--u-em)}
+.p-fail{color:var(--u-danger);background:var(--u-danger-bg)}
+.p-canc{color:var(--u-ink2);background:var(--u-sunken)}
+.p-neutral{color:var(--u-ink2);background:var(--u-surface);border:1px solid var(--u-line)}
+.demo{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border-radius:5px;border:1px dashed var(--u-warn);color:var(--u-warn);background:var(--u-warn-bg);font:500 10px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.demobar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--u-warn-bg);color:var(--u-warn);border-bottom:1px solid #F1DDB8;font-size:12.5px;font-weight:500;line-height:1.35}
+.demobar b{font-weight:700}
+.demobar .dlink{margin-left:auto;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;font-weight:600}
+.av-wrap{position:relative;flex:none;display:inline-grid}
+.av-badge{position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);background:var(--u-warn-bg);color:var(--u-warn);border:1px solid #EBCB94;font:700 9px/1 var(--font-body);letter-spacing:.06em;text-transform:uppercase;padding:2px 4px;border-radius:4px}
+.welcome{padding:16px;display:grid;gap:8px}
+.welcome .w-ic{width:36px;height:36px;border-radius:10px;background:var(--u-warn-bg);color:var(--u-warn);display:grid;place-items:center}
+.welcome p{font-size:13.5px;color:var(--u-ink2)}
+.ucard{background:var(--u-surface);border:1px solid var(--u-line);border-radius:14px}
+.stat{padding:16px;display:grid;gap:6px;min-width:0}
+.stat .k{font-size:12.5px;color:var(--u-ink2);font-weight:500}
+.stat .v{font:650 28px/1 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .s{font-size:12px;color:var(--u-ink3)}
+.utbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.utbl th{text-align:left;font:600 11px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;color:var(--u-ink3);padding:10px 14px;border-bottom:1px solid var(--u-line);background:#FAFBFD}
+.utbl td{padding:11px 14px;border-bottom:1px solid var(--u-line-soft);white-space:nowrap}
+.utbl tr:last-child td{border-bottom:0}
+.utbl tbody tr{transition:background var(--dur-fast)}
+.utbl tbody tr:hover{background:#F9FBFD}
+.ref{font:500 12.5px/1 var(--font-mono);color:var(--u-ink2)}
+.num{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+.navi{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--u-slate-300);text-decoration:none;position:relative}
+.navi:hover{background:rgba(247,249,252,.06);color:var(--u-cloud)}
+.navi.on{background:rgba(16,168,138,.16);color:var(--u-cloud)}
+.navi.on::before{content:"";position:absolute;left:-12px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--u-em)}
+.utabs{display:flex;gap:2px;border-bottom:1px solid var(--u-line)}
+.utabs button{border:0;background:none;padding:10px 12px;font:500 14px/1 var(--font-body);color:var(--u-ink2);cursor:pointer;position:relative}
+.utabs button.on{color:var(--u-ink);font-weight:600}
+.utabs button.on::after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;background:var(--u-em);border-radius:2px}
+.fchip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--u-line);background:var(--u-surface);font:500 13px/1 var(--font-body);color:var(--u-ink2);cursor:pointer;white-space:nowrap}
+.fchip b{font-weight:600;color:var(--u-ink3);font-variant-numeric:tabular-nums}
+.fchip.on{background:var(--u-navy);border-color:var(--u-navy);color:var(--u-cloud)}
+.fchip.on b{color:var(--u-slate-300)}
+.icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.icons div{display:grid;justify-items:center;gap:6px;padding:12px 4px;border-radius:10px;background:var(--u-surface);border:1px solid var(--u-line-soft);font:400 11px/1.2 var(--font-mono);color:var(--u-ink3);text-align:center}
+.icons svg{width:22px;height:22px;color:var(--u-ink)}
+.space-row{display:grid;grid-template-columns:62px 1fr 56px;align-items:center;gap:10px;font:400 12px/1 var(--font-mono);color:var(--u-ink3)}
+.space-row i{height:10px;background:var(--u-em);border-radius:2px;display:block}
+.rad{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.rad div{height:72px;border:1.5px solid var(--u-navy);background:var(--u-surface);display:grid;place-items:end start;padding:8px;font:400 11px/1.25 var(--font-mono);color:var(--u-ink2)}
+.shd{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px;padding:6px}
+.shd div{height:84px;border-radius:14px;background:var(--u-surface);display:grid;place-items:end start;padding:10px;font:400 11px/1.3 var(--font-mono);color:var(--u-ink2)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--u-navy);color:var(--u-cloud);display:grid;place-items:center;font:600 13px/1 var(--font-body);flex:none}
+
+/* ===== frames ===== */
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px}
+.browser{min-width:1060px;border-radius:14px;border:1px solid var(--frame);overflow:hidden;background:var(--u-bg);box-shadow:var(--shadow-md)}
+.bbar{height:38px;background:var(--frame-bar);display:flex;align-items:center;gap:14px;padding:0 14px;border-bottom:1px solid var(--frame)}
+.bbar .dots{display:flex;gap:6px}.bbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--frame)}
+.bbar .url{flex:1;max-width:460px;margin:0 auto;height:24px;border-radius:7px;background:var(--surface);display:flex;align-items:center;gap:6px;padding:0 10px;font:400 12px/1 var(--font-mono);color:var(--ink-3)}
+.bbar .url svg{width:12px;height:12px}
+.phones{display:flex;flex-wrap:wrap;gap:36px 24px;justify-content:center}
+.phone-wrap{display:grid;gap:12px;justify-items:center;align-content:start;width:344px;max-width:100%}
+.phone{width:100%;border-radius:38px;border:8px solid #0F2138;background:var(--u-bg);overflow:hidden;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;height:790px}
+.sbar{height:30px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;font:600 12px/1 var(--font-body);color:var(--u-ink);flex:none;background:var(--u-surface)}
+.sbar .isl{width:84px;height:22px;border-radius:12px;background:#0F2138}
+.pscroll{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.cap{display:grid;gap:4px;max-width:340px;text-align:center}
+.cap b{font-size:14px;color:var(--ink)}
+.cap span{font-size:13px;color:var(--ink-3)}
+.frame-cap{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin:28px 0 12px}
+.frame-cap h3{font-size:20px}
+.frame-cap p{font-size:13.5px;color:var(--ink-3);max-width:70ch}
+.sample{font:500 11px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:4px 7px;background:var(--surface)}
+
+/* landing mock */
+.lnav{display:flex;align-items:center;gap:28px;padding:18px 40px;background:var(--u-bg)}
+.lnav .links{display:flex;gap:22px;font-size:14px;color:var(--u-ink2);font-weight:500}
+.lnav .r{margin-left:auto;display:flex;gap:8px}
+.lhero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;padding:44px 40px 56px;align-items:center}
+.lhero h1{font-size:58px;line-height:1.0;letter-spacing:-.035em;font-variation-settings:"opsz" 96;margin-top:16px}
+.lhero p.l{font-size:18px;color:var(--u-ink2);margin-top:18px;max-width:46ch}
+.lchip{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px 0 6px;border-radius:999px;background:var(--u-surface);border:1px solid var(--u-line);font-size:13px;color:var(--u-ink2);font-weight:500}
+.lchip i{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--u-em-tint)}
+.lstage{position:relative;height:470px;border-radius:24px;background:var(--u-navy);overflow:hidden}
+.lstage::before{content:"";position:absolute;width:520px;height:520px;right:-180px;top:-200px;border-radius:50%;border:56px solid rgba(16,168,138,.16)}
+.lstage::after{content:"";position:absolute;width:300px;height:300px;left:-120px;bottom:-150px;border-radius:50%;border:40px solid rgba(247,249,252,.05)}
+.lcard{position:absolute;left:40px;top:32px;width:300px;background:var(--u-surface);border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);display:grid;gap:12px;z-index:1}
+.lfloat{position:absolute;right:28px;bottom:26px;width:250px;background:var(--u-surface);border-radius:16px;padding:14px;box-shadow:var(--shadow-lg);display:grid;gap:10px;z-index:1}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 40px 48px}
+.steps3 .ucard{padding:20px;display:grid;gap:10px}
+.sn{width:28px;height:28px;border-radius:8px;background:var(--u-navy);color:var(--u-cloud);display:grid;place-items:center;font:600 13px/1 var(--font-body)}
+
+/* dashboard mock */
+.dash{display:grid;grid-template-columns:232px 1fr;min-height:700px}
+.side{background:var(--u-navy);padding:20px 12px;display:flex;flex-direction:column;gap:4px;--m1:#F7F9FC}
+.side .lockup{padding:4px 12px 20px}
+.side .lockup .wm{font-size:21px}
+.side .lockup svg{width:28px;height:28px}
+.side .sp{flex:1}
+.side .me{display:flex;gap:10px;align-items:center;padding:12px;border-top:1px solid #2A4566;margin-top:8px;color:var(--u-cloud);font-size:13.5px}
+.side .me .av{background:var(--u-em);color:var(--u-navy)}
+.side .me small{display:block;color:var(--u-slate-300);font-size:12px}
+.dmain{display:flex;flex-direction:column;min-width:0}
+.dtop{display:flex;align-items:center;gap:12px;padding:16px 28px;background:var(--u-surface);border-bottom:1px solid var(--u-line)}
+.search{display:flex;align-items:center;gap:8px;height:40px;border:1px solid var(--u-line);border-radius:10px;padding:0 12px;width:360px;color:var(--u-ink3);font-size:14px;background:var(--u-bg)}
+.dbody{padding:24px 28px;display:grid;gap:20px}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dgrid{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+.feed{padding:16px;display:grid;gap:14px 24px;grid-template-columns:repeat(2,1fr)}
+.feed>b{grid-column:1/-1}
+.ev{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:13px}
+.ev .ei{width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
+.ev small{display:block;color:var(--u-ink3);font-size:12px;margin-top:2px}
+.empty{padding:40px 28px;display:grid;justify-items:center;text-align:center;gap:10px}
+.empty .em-mark{width:64px;height:64px;border-radius:18px;background:var(--u-em-tint);display:grid;place-items:center;color:var(--u-em-ink);margin-bottom:6px}
+.empty p{color:var(--u-ink2);max-width:42ch;font-size:14px}
+
+/* create link mock */
+.create{display:grid;grid-template-columns:1fr 380px;gap:28px;padding:28px 40px 40px;align-items:start}
+.fsec{padding:20px;display:grid;gap:16px}
+.fsec h3{font-size:16px;font-family:var(--font-body);font-weight:600;letter-spacing:0}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* checkout etc (phone) */
+.ph-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:var(--u-surface);border-bottom:1px solid var(--u-line);--m1:#142B45}
+.ph-head .lockup svg{width:22px;height:22px}
+.ph-head .lockup .wm{font-size:17px}
+.ph-body{padding:16px;display:grid;gap:12px;align-content:start;flex:1;overflow:hidden}
+.seller{display:flex;align-items:center;gap:12px;padding:14px}
+.seller b{font-size:15px;display:block}
+.seller small{font-size:12px;color:var(--u-ink3)}
+.item{padding:16px;display:grid;gap:8px}
+.item .price{font:650 32px/1 var(--font-display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:6px}
+.item .price small{font:600 14px/1 var(--font-body);color:var(--u-ink2);letter-spacing:0;margin-right:4px}
+.kv{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--u-ink2)}
+.kv b{color:var(--u-ink);font-weight:600;display:block}
+.how{padding:14px 16px;display:grid;gap:10px;background:var(--u-sunken);border-radius:14px}
+.how ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+.how li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:13px;color:var(--u-ink2);counter-increment:s}
+.how li::before{content:counter(s);width:22px;height:22px;border-radius:50%;background:var(--u-surface);border:1px solid var(--u-line);display:grid;place-items:center;font:600 11px/1 var(--font-body);color:var(--u-ink)}
+.ph-foot{padding:12px 16px 18px;background:var(--u-surface);border-top:1px solid var(--u-line);display:grid;gap:8px}
+.ph-foot small{font-size:12px;color:var(--u-ink3);text-align:center}
+.demo-out{display:grid;gap:8px;padding:10px;border-radius:12px;background:var(--u-warn-bg);border:1px solid #F1DDB8}
+.demo-out>span{display:flex;align-items:center;gap:6px;font:600 12px/1 var(--font-body);color:var(--u-warn)}
+.demo-out .seg{background:rgba(255,255,255,.6)}
+.sheet-bg{position:absolute;inset:30px 0 0;background:rgba(15,33,56,.48)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--u-surface);border-radius:22px 22px 0 0;padding:10px 16px 20px;display:grid;gap:12px;box-shadow:var(--shadow-lg)}
+.grab{width:40px;height:4px;border-radius:4px;background:var(--u-line);margin:0 auto 4px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--u-line);border-radius:12px;font-size:14px;cursor:pointer}
+.opt.on{border-color:var(--u-em);box-shadow:0 0 0 1px var(--u-em);background:#FBFEFD}
+.opt small{display:block;font-size:12.5px;color:var(--u-ink3);margin-top:2px}
+.radio{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--u-slate-300);flex:none;margin-top:1px;display:grid;place-items:center}
+.opt.on .radio{border-color:var(--u-em)}
+.opt.on .radio::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--u-em)}
+.shero{padding:20px 16px;display:grid;justify-items:center;text-align:center;gap:8px}
+.shero .lk{width:56px;height:56px;border-radius:50%;background:var(--u-em-tint);display:grid;place-items:center;color:var(--u-em-ink);position:relative}
+.shero .lk::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--u-em);opacity:.35}
+.shero h3{font-size:22px}
+.shero p{font-size:13px;color:var(--u-ink2);max-width:30ch}
+.tl{display:grid;gap:0;padding:6px 16px 12px}
+.tli{display:grid;grid-template-columns:24px 1fr;gap:12px;position:relative;padding-bottom:16px}
+.tli:not(:last-child)::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:var(--u-line)}
+.tli.done:not(:last-child)::before{background:var(--u-em)}
+.tdot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--u-line);background:var(--u-surface);color:var(--u-navy)}
+.tli.done .tdot{background:var(--u-em);border-color:var(--u-em)}
+.tli.now .tdot{border-color:var(--u-em);box-shadow:0 0 0 4px rgba(16,168,138,.18)}
+.tli.now .tdot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--u-em)}
+.tli b{font-size:14px;font-weight:600;display:block}
+.tli small{font-size:12px;color:var(--u-ink3)}
+.tli.todo b{color:var(--u-ink3);font-weight:500}
+.tabnav{display:grid;grid-template-columns:repeat(5,1fr);align-items:end;background:var(--u-surface);border-top:1px solid var(--u-line);padding:6px 4px 14px;flex:none}
+.tabnav a{display:grid;justify-items:center;gap:3px;font-size:10.5px;font-weight:500;color:var(--u-ink3);text-decoration:none;padding:4px 0;min-height:44px;align-content:center}
+.tabnav a.on{color:var(--u-ink)}
+.tabnav a.on svg{color:var(--u-em-ink)}
+.tabnav .fab{width:48px;height:48px;border-radius:16px;background:var(--u-navy);color:var(--u-em);display:grid;place-items:center;margin:-18px auto 0;box-shadow:0 8px 18px -6px rgba(20,43,69,.55)}
+.mrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--u-line-soft)}
+.mrow:last-child{border-bottom:0}
+.mrow .t{flex:1;min-width:0}
+.mrow .t b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .t small{font-size:12px;color:var(--u-ink3)}
+.mrow .a{text-align:right;display:grid;gap:4px;justify-items:end;font-size:13.5px}
+.hs{display:flex;gap:10px;overflow:hidden}
+.hs .ucard{flex:none;width:138px}
+
+/* motion lab */
+.lab{display:grid;gap:16px}
+@media (min-width:900px){.lab{grid-template-columns:repeat(2,1fr)}}
+.lab .kit{background:var(--u-bg)}
+.lab .kit p{font-size:13.5px;color:var(--u-ink2)}
+.stbox{background:var(--u-surface);border:1px solid var(--u-line);border-radius:14px;padding:16px;display:grid;gap:14px}
+.prog{height:6px;border-radius:6px;background:var(--u-sunken);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--u-em);border-radius:6px;transition:width var(--dur-status) var(--ease-out),background-color var(--dur-base)}
+.stline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pillx{transition:background-color var(--dur-base) var(--ease-out),color var(--dur-base) var(--ease-out)}
+.pop{animation:pop var(--dur-slow) var(--ease-out)}
+@keyframes pop{0%{transform:scale(.9);opacity:.4}100%{transform:none;opacity:1}}
+.menu-anchor{position:relative;display:inline-block}
+.menu{position:absolute;top:calc(100% + 6px);left:0;width:220px;background:var(--u-surface);border:1px solid var(--u-line);border-radius:12px;box-shadow:var(--shadow-md);padding:6px;transform-origin:top left;transform:scale(.96) translateY(-4px);opacity:0;visibility:hidden;transition:transform var(--dur-base) var(--ease-out),opacity var(--dur-base) var(--ease-out),visibility 0s linear var(--dur-base);z-index:3}
+.menu.open{transform:none;opacity:1;visibility:visible;transition-delay:0s}
+.menu button{display:flex;width:100%;align-items:center;gap:10px;border:0;background:none;padding:9px 10px;border-radius:8px;font:500 14px/1 var(--font-body);color:var(--u-ink);cursor:pointer;text-align:left}
+.menu button:hover{background:var(--u-sunken)}
+.stage-modal{position:relative;height:250px;border-radius:12px;background:var(--u-sunken);overflow:hidden;border:1px solid var(--u-line)}
+.mback{position:absolute;inset:0;background:rgba(15,33,56,.45);opacity:0;transition:opacity var(--dur-slow) var(--ease-out);pointer-events:none}
+.mpanel{position:absolute;left:50%;top:50%;width:min(300px,86%);background:var(--u-surface);border-radius:20px;padding:18px;box-shadow:var(--shadow-lg);display:grid;gap:10px;transform:translate(-50%,-44%) scale(.98);opacity:0;visibility:hidden;transition:transform var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out),visibility 0s linear var(--dur-slow)}
+.stage-modal.open .mback{opacity:1;pointer-events:auto}
+.stage-modal.open .mpanel{transform:translate(-50%,-50%);opacity:1;visibility:visible;transition-delay:0s}
+.mpanel h4{font-size:17px}
+.mpanel p{font-size:13.5px;color:var(--u-ink2)}
+.mstage-in{position:absolute;inset:0;display:grid;place-items:center}
+.skel{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--u-sunken) 0%,#F6F8FB 50%,var(--u-sunken) 100%);background-size:200% 100%;animation:shim 1.3s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.rm .skel{animation:none}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}.spin{animation-duration:2.4s}}
+.fadein{animation:fadein var(--dur-slow) var(--ease-out) both}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pagebox{position:relative;height:170px;border:1px solid var(--u-line);border-radius:12px;background:var(--u-surface);overflow:hidden}
+.pg{position:absolute;inset:0;padding:16px;display:grid;gap:10px;align-content:start;transition:opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
+.pg[aria-hidden="true"]{opacity:0;transform:translateX(12px);pointer-events:none}
+.pg.out{transform:translateX(-12px)}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--u-navy);color:var(--u-cloud);border-radius:12px;font-size:14px;box-shadow:var(--shadow-md);transform:translateY(8px);opacity:0;transition:transform var(--dur-base) var(--ease-out),opacity var(--dur-base) var(--ease-out)}
+.toast.show{transform:none;opacity:1}
+.toast svg{color:var(--u-em)}
+.dur{display:grid;gap:8px}
+.dur .r{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;font:400 12px/1.2 var(--font-mono);color:var(--u-ink2)}
+.dur .track{height:24px;border-radius:6px;background:var(--u-sunken);position:relative;overflow:hidden}
+.dur .ball{position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:5px;background:var(--u-navy)}
+.dur.go .ball{transform:translateX(calc(var(--w) - 24px))}
+.switch{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer}
+.switch input{appearance:none;width:40px;height:24px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:background var(--dur-fast);margin:0}
+.switch input::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 2px rgba(20,43,69,.3);transition:transform var(--dur-base) var(--ease-out)}
+.switch input:checked{background:var(--emerald)}
+.switch input:checked::after{transform:translateX(16px)}
+
+/* responsive + direction */
+.bp{display:grid;gap:12px}
+@media (min-width:900px){.bp{grid-template-columns:repeat(4,1fr)}}
+.bp .card{padding:18px;display:grid;gap:8px;align-content:start}
+.bp .card b{font:650 22px/1 var(--font-display)}
+.bp .card p{font-size:13.5px;color:var(--ink-2)}
+.dir{background:var(--panel);color:var(--on-panel);border-radius:20px;padding:clamp(24px,4vw,44px);display:grid;gap:26px;--m1:#F7F9FC}
+.dir h2{color:var(--on-panel);font-size:clamp(26px,3.4vw,40px);line-height:1.1;max-width:22ch}
+.dir p{color:var(--on-panel-2);max-width:68ch}
+.dir .cols{display:grid;gap:22px}
+@media (min-width:900px){.dir .cols{grid-template-columns:repeat(3,1fr)}}
+.dir h3{color:var(--on-panel);font-size:17px;margin-bottom:8px}
+.dir ul{margin:0;padding-left:18px;color:var(--on-panel-2);display:grid;gap:6px;font-size:14.5px}
+.ask{display:grid;gap:10px;counter-reset:q;margin:0;padding:0;list-style:none}
+.ask li{counter-increment:q;display:grid;grid-template-columns:32px 1fr;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.ask li::before{content:counter(q);width:28px;height:28px;border-radius:8px;background:var(--accent-tint);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:13px}
+.ask b{display:block;font-size:15px}
+.ask span{font-size:14px;color:var(--ink-2)}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--sunken);padding:1px 5px;border-radius:5px}
+.ui code{background:var(--u-sunken);color:var(--u-ink)}
+footer{padding-block:40px 64px;border-top:1px solid var(--line);color:var(--ink-3);font-size:13px}
+</style>
+
+<!-- logo sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="pl-clipB"><rect x="20" y="34" width="12" height="12"/></clipPath>
+    <symbol id="mark-a" viewBox="0 0 64 64">
+      <path d="M14 16a6 6 0 0 1 6-6h15a15 15 0 0 1 0 30h-9v8a6 6 0 0 1-12 0z" style="fill:var(--m1)"/>
+      <circle cx="34" cy="25" r="6.5" style="fill:var(--m2)"/>
+    </symbol>
+    <symbol id="mark-b" viewBox="0 0 64 64">
+      <rect x="26" y="24" width="28" height="28" rx="9" fill="none" stroke-width="7" style="stroke:var(--m2)"/>
+      <rect x="10" y="12" width="28" height="28" rx="9" fill="none" stroke-width="7" style="stroke:var(--m1)"/>
+      <rect x="26" y="24" width="28" height="28" rx="9" fill="none" stroke-width="7" clip-path="url(#pl-clipB)" style="stroke:var(--m2)"/>
+    </symbol>
+    <symbol id="mark-c" viewBox="0 0 64 64">
+      <rect x="13" y="10" width="11" height="44" rx="5.5" style="fill:var(--m1)"/>
+      <path d="M28 15.5h6a11 11 0 0 1 0 22h-6" fill="none" stroke-width="11" style="stroke:var(--m2)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="lockup" href="#top" aria-label="Paylink"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></a>
+    <nav aria-label="Sections">
+      <a href="#logo">Logo</a><a href="#colour">Colour</a><a href="#type">Type</a><a href="#components">Components</a><a href="#screens">Screens</a><a href="#motion">Motion</a><a href="#responsive">Responsive</a><a href="#direction">Direction</a><a href="#tokens">Tokens</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="wrap hero">
+  <div class="eyebrow">Brand &amp; design system · v0.2 <span class="review">For final approval</span></div>
+  <h1>A payment you can <em>see</em> from link to doorstep.</h1>
+  <p class="lede">Paylink sits between a seller and a buyer who have never met. The identity has one job: make that stranger on the other side of the screen feel accountable. It does that with a calm navy structure, emerald reserved for the moments that move a deal forward, and a lot of Soft Cloud space so nothing is hidden.</p>
+  <div class="traits"><span>Trustworthy</span><span>Modern</span><span>Professional</span><span>Secure</span><span>Approachable</span><span>Simple to use</span><span>Premium, not intimidating</span></div>
+</section>
+
+<!-- ================= LOGO ================= -->
+<section class="sec" id="logo"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">01 · Logo exploration</div>
+    <h2>Three marks explored. Interlock selected.</h2>
+    <p>Each concept is drawn on a 64-unit grid from two shapes at most, so it survives at 16px. All three use only Deep Navy and Paylink Emerald, and swap navy for Soft Cloud on dark backgrounds. The wordmark is lowercase Bricolage Grotesque with an emerald tittle on the <i>i</i>, which ties every concept back to the same green point.</p>
+  </div>
+
+  <div class="grid g3">
+    <!-- A -->
+    <article class="card concept">
+      <div class="stage">
+        <svg class="big" viewBox="0 0 64 64" role="img" aria-label="Concept A mark"><use href="#mark-a"/></svg>
+        <span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span>
+      </div>
+      <div class="apps">
+        <div><span class="tile"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg></span><small>App icon</small></div>
+        <div><span class="tile em"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg></span><small>Alt tile</small></div>
+        <div><span class="avatar"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg></span><small>Social avatar</small></div>
+        <div><span class="fav"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg><span class="dk"><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg></span></span><small>32 · 16 · dark</small></div>
+      </div>
+      <div class="body">
+        <div class="over">A · Letter-based</div>
+        <h3>Counter P</h3>
+        <p>A solid geometric P whose counter is an emerald dot. The value sits inside the letter, held by the shape around it.</p>
+        <ul class="pc">
+          <li class="y"><i data-lucide="check"></i>Most legible at 16px; reads as a P instantly</li>
+          <li class="y"><i data-lucide="check"></i>The dot can stand alone as a status or loading motif</li>
+          <li class="n"><i data-lucide="minus"></i>Solid P monograms are common; less ownable</li>
+        </ul>
+      </div>
+    </article>
+    <!-- B -->
+    <article class="card concept pick">
+      <div class="stage">
+        <span class="tag-pick">Selected</span>
+        <svg class="big" viewBox="0 0 64 64" role="img" aria-label="Concept B mark"><use href="#mark-b"/></svg>
+        <span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span>
+      </div>
+      <div class="apps">
+        <div><span class="tile"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg></span><small>App icon</small></div>
+        <div><span class="tile em"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg></span><small>Alt tile</small></div>
+        <div><span class="avatar"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg></span><small>Social avatar</small></div>
+        <div><span class="fav"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="dk"><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg></span></span><small>32 · 16 · dark</small></div>
+      </div>
+      <div class="body">
+        <div class="over">B · Abstract connection</div>
+        <h3>Interlock</h3>
+        <p>Two rounded frames, buyer and seller, woven over and under each other. Neither can pull away without the other: a picture of a deal held together.</p>
+        <ul class="pc">
+          <li class="y"><i data-lucide="check"></i>Strongest story about two parties and trust</li>
+          <li class="y"><i data-lucide="check"></i>Distinct shape; avoids the overlapping-circles cliché</li>
+          <li class="n"><i data-lucide="minus"></i>The weave detail softens below 20px</li>
+          <li class="n"><i data-lucide="minus"></i>Doesn't say "P"; needs the wordmark early on</li>
+        </ul>
+      </div>
+    </article>
+    <!-- C -->
+    <article class="card concept">
+      <div class="stage">
+                <svg class="big" viewBox="0 0 64 64" role="img" aria-label="Concept C mark"><use href="#mark-c"/></svg>
+        <span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span>
+      </div>
+      <div class="apps">
+        <div><span class="tile"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg></span><small>App icon</small></div>
+        <div><span class="tile em"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg></span><small>Alt tile</small></div>
+        <div><span class="avatar"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg></span><small>Social avatar</small></div>
+        <div><span class="fav"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg><span class="dk"><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg></span></span><small>32 · 16 · dark</small></div>
+      </div>
+      <div class="body">
+        <div class="over">C · Icon + wordmark</div>
+        <h3>Linked P</h3>
+        <p>The P split into its two parts: a navy stem for <b>pay</b> and an emerald bowl for <b>link</b>, held a hair apart. It is both the letter and the idea of two pieces joined.</p>
+        <ul class="pc">
+          <li class="y"><i data-lucide="check"></i>Reads as P and carries the name's meaning</li>
+          <li class="y"><i data-lucide="check"></i>Uses both brand colours with a clear job each</li>
+          <li class="y"><i data-lucide="check"></i>The bowl alone works as a loader and link motif</li>
+          <li class="n"><i data-lucide="minus"></i>The 4-unit gap closes visually at 16px (still reads)</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <h3 class="sub">Selected mark · lockups</h3>
+  <div class="lockups">
+    <div class="lk-cell" style="background:#F7F9FC;--m1:#142B45"><span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><small>Horizontal · on Cloud</small></div>
+    <div class="lk-cell" style="background:#142B45;--m1:#F7F9FC"><span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><small style="color:#B4C2D3">Horizontal · on Navy</small></div>
+    <div class="lk-cell" style="background:#FFFFFF;--m1:#142B45"><span class="stack"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><small>Stacked · app splash, social</small></div>
+    <div class="lk-cell" style="background:#0B1726;--m1:#F7F9FC"><span class="stack"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><small style="color:#B4C2D3">Stacked · dark</small></div>
+  </div>
+
+  <h3 class="sub">In a browser tab</h3>
+  <div class="tabs-demo">
+    <div class="tabbar l" aria-label="Light browser tabs">
+      <div class="btab on"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg>Paylink · Checkout</div>
+      <div class="btab"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg>Paylink · Concept A</div>
+      <div class="btab"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg>Paylink · Concept C</div>
+    </div>
+    <div class="tabbar d" aria-label="Dark browser tabs">
+      <div class="btab on"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg>Paylink · Checkout</div>
+      <div class="btab"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-a"/></svg>Paylink · Concept A</div>
+      <div class="btab"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-c"/></svg>Paylink · Concept C</div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:12px">Logo rules: clear space equals one ring stroke on all sides; minimum size 16px for the mark and 72px wide for the lockup; never recolour, outline, rotate or add effects. SVG source files are in <code>design-system/logos/</code>.</p>
+</div></section>
+
+<!-- ================= COLOUR ================= -->
+<section class="sec" id="colour"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">02 · Colour</div>
+    <h2>Three brand colours, and only three</h2>
+    <p>Soft Cloud is the ground, Deep Navy is the structure, and Emerald is the signal. The proportion matters as much as the hues: if emerald appears everywhere, it stops meaning "this is the next step" or "this went right".</p>
+  </div>
+  <div class="prim">
+    <div class="sw navy"><div><div class="k">Primary 1 · Structure</div><h3>Deep Navy</h3><p>Trust and structure. Headings, body text, navigation, the seller sidebar and the fill of every primary button.</p></div><dl><dt>HEX</dt><dd>#142B45</dd><dt>RGB</dt><dd>20 43 69</dd><dt>Token</dt><dd>--pl-navy</dd></dl></div>
+    <div class="sw em"><div><div class="k">Primary 2 · Action</div><h3>Paylink Emerald</h3><p>The colour of action: primary button labels, focus rings, progress and positive states. Text on an emerald fill is always navy.</p></div><dl><dt>HEX</dt><dd>#10A88A</dd><dt>RGB</dt><dd>16 168 138</dd><dt>Token</dt><dd>--pl-emerald</dd></dl></div>
+    <div class="sw cl"><div><div class="k">Primary 3 · Foundation</div><h3>Soft Cloud</h3><p>Page backgrounds and breathing room. White is reserved for raised surfaces (cards and inputs) that sit on top of it.</p></div><dl><dt>HEX</dt><dd>#F7F9FC</dd><dt>RGB</dt><dd>247 249 252</dd><dt>Token</dt><dd>--pl-cloud</dd></dl></div>
+  </div>
+  <h3 class="sub">Proportion on a typical screen</h3>
+  <div class="ratio" role="img" aria-label="About 70 percent Soft Cloud, 24 percent Deep Navy, 6 percent Emerald">
+    <div style="flex:70;background:#F7F9FC;color:#142B45">Soft Cloud + white surfaces ≈ 70%</div>
+    <div style="flex:24;background:#142B45;color:#F7F9FC">Navy ≈ 24%</div>
+    <div style="flex:6;background:#10A88A;color:#142B45;padding:0 6px;justify-content:center">6%</div>
+  </div>
+
+  <h3 class="sub">Supporting colours (never a fourth brand colour)</h3>
+  <div class="ramp">
+    <div class="chip"><i style="background:#0B1726"></i><div><b>Navy 950</b><span>#0B1726 · dark bg</span></div></div>
+    <div class="chip"><i style="background:#233D5C"></i><div><b>Navy 700</b><span>#233D5C · hover</span></div></div>
+    <div class="chip"><i style="background:#4A5F78"></i><div><b>Slate 600</b><span>#4A5F78 · text 2</span></div></div>
+    <div class="chip"><i style="background:#5B6E85"></i><div><b>Slate 500</b><span>#5B6E85 · text 3</span></div></div>
+    <div class="chip"><i style="background:#DCE3EC"></i><div><b>Line</b><span>#DCE3EC · borders</span></div></div>
+    <div class="chip"><i style="background:#EEF2F7"></i><div><b>Sunken</b><span>#EEF2F7 · wells</span></div></div>
+    <div class="chip"><i style="background:#E7F6F2"></i><div><b>Emerald 50</b><span>#E7F6F2 · tint</span></div></div>
+    <div class="chip"><i style="background:#08745F"></i><div><b>Emerald 700</b><span>#08745F · text</span></div></div>
+    <div class="chip"><i style="background:#B23A33"></i><div><b>Danger</b><span>#B23A33 · errors</span></div></div>
+    <div class="chip"><i style="background:#9A5B00"></i><div><b>Warning / Demo</b><span>#9A5B00</span></div></div>
+    <div class="chip"><i style="background:#2B5C8A"></i><div><b>Info</b><span>#2B5C8A · pending</span></div></div>
+  </div>
+
+  <h3 class="sub">Contrast decisions</h3>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>Pair</th><th>Ratio</th><th>WCAG</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pair" style="background:#142B45;color:#10A88A">Pay now</span></td><td class="tnum">4.78 : 1</td><td class="ok">AA</td><td>Primary buttons: emerald label on navy. This is the signature pairing. Hover darkens the navy (5.4 : 1); it never lightens.</td></tr>
+      <tr><td><span class="pair" style="background:#10A88A;color:#142B45">Pay now</span></td><td class="tnum">4.78 : 1</td><td class="ok">AA</td><td>The inverse, for buttons on navy surfaces and for the Completed status.</td></tr>
+      <tr><td><span class="pair" style="background:#10A88A;color:#FFFFFF">Pay now</span></td><td class="tnum">3.00 : 1</td><td class="no">Fails AA</td><td>White on emerald is not used for text. It is allowed only for icons 24px and up.</td></tr>
+      <tr><td><span class="pair" style="background:#F7F9FC;color:#142B45;border:1px solid #DCE3EC">Heading</span></td><td class="tnum">13.6 : 1</td><td class="ok">AAA</td><td>Default text on the page.</td></tr>
+      <tr><td><span class="pair" style="background:#F7F9FC;color:#4A5F78;border:1px solid #DCE3EC">Secondary</span></td><td class="tnum">6.22 : 1</td><td class="ok">AA</td><td>Descriptions and helper text.</td></tr>
+      <tr><td><span class="pair" style="background:#F7F9FC;color:#5B6E85;border:1px solid #DCE3EC">Tertiary</span></td><td class="tnum">4.96 : 1</td><td class="ok">AA</td><td>The lightest text colour allowed. Nothing lighter is used for words.</td></tr>
+      <tr><td><span class="pair" style="background:#E7F6F2;color:#08745F">Secured</span></td><td class="tnum">5.13 : 1</td><td class="ok">AA</td><td>Emerald as text uses Emerald 700, never the brand emerald.</td></tr>
+      <tr><td><span class="pair" style="background:#0B1726;color:#10A88A">Dark mode</span></td><td class="tnum">6.00 : 1</td><td class="ok">AA</td><td>Brand emerald works as text on dark navy surfaces.</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- ================= TYPE ================= -->
+<section class="sec" id="type"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">03 · Typography</div>
+    <h2>A warm display face over a precise working face</h2>
+    <p><b>Bricolage Grotesque</b> sets headlines and amounts. Its optical sizing makes it slightly characterful when large and plain when small, which is where the "approachable" comes from. <b>Instrument Sans</b> does all of the reading and form work and has tabular figures for money columns. <b>IBM Plex Mono</b> is used only for references like <span class="mono">PL-7QK2M9</span> and for the demo label. All three are free on Google Fonts.</p>
+  </div>
+  <div class="card spec">
+    <div class="disp">UGX 185,000.<br>Every step in view.</div>
+    <div class="glyphs">Aa Bb Gg Kk Qq Rr 0123456789 &amp; @ UGX</div>
+  </div>
+  <div class="faces" style="margin-top:16px">
+    <div class="card face"><span class="nm">Display · Bricolage Grotesque 600–700</span><span class="smp" style="font-family:var(--font-display);font-weight:650;letter-spacing:-.025em">Deal completed</span><span class="note">Headings h1–h3, hero amounts, the wordmark. Tracking −2% to −3.5%.</span></div>
+    <div class="card face"><span class="nm">Text · Instrument Sans 400–600</span><span class="smp" style="font-family:var(--font-body);font-weight:500">Delivery in 2–3 days</span><span class="note">Body, labels, buttons, tables, navigation. Tabular numbers in columns.</span></div>
+    <div class="card face"><span class="nm">Utility · IBM Plex Mono 400–500</span><span class="smp" style="font-family:var(--font-mono);font-size:24px">PL-7QK2M9</span><span class="note">References, link slugs, event IDs and the Demo tag. Never paragraphs.</span></div>
+  </div>
+
+  <h3 class="sub">Type scale (mobile → desktop)</h3>
+  <div class="tbl-wrap"><table class="t scale">
+    <thead><tr><th>Role</th><th>Sample</th><th>Size / line</th><th>Weight · tracking</th></tr></thead>
+    <tbody>
+      <tr><td>Display</td><td style="font:650 34px/1.05 var(--font-display);letter-spacing:-.03em">Pay with confidence</td><td class="tnum">40→56 / 1.05</td><td>650 · −3%</td></tr>
+      <tr><td>H1</td><td style="font:650 28px/1.12 var(--font-display);letter-spacing:-.025em">New payment link</td><td class="tnum">32→40 / 1.12</td><td>650 · −2.5%</td></tr>
+      <tr><td>H2</td><td style="font:650 22px/1.2 var(--font-display);letter-spacing:-.02em">Recent transactions</td><td class="tnum">24→28 / 1.2</td><td>650 · −2%</td></tr>
+      <tr><td>H3</td><td style="font:600 19px/1.3 var(--font-display);letter-spacing:-.015em">Delivery details</td><td class="tnum">20 / 1.3</td><td>600 · −1.5%</td></tr>
+      <tr><td>H4 / card title</td><td style="font:600 16px/1.4 var(--font-body)">Seller information</td><td class="tnum">17 / 1.4</td><td>600 · 0</td></tr>
+      <tr><td>Body large</td><td style="font:400 17px/1.55 var(--font-body)">Your buyer sees exactly what they pay for.</td><td class="tnum">17 / 1.55</td><td>400</td></tr>
+      <tr><td>Body</td><td style="font:400 15px/1.5 var(--font-body)">The seller is notified when you pay.</td><td class="tnum">15 / 1.5</td><td>400</td></tr>
+      <tr><td>Input text</td><td style="font:400 16px/1.5 var(--font-body)">Handwoven raffia basket set</td><td class="tnum">16</td><td>400 (stops iOS zoom)</td></tr>
+      <tr><td>Label / small</td><td style="font:600 13px/1.4 var(--font-body)">Amount (UGX)</td><td class="tnum">13 / 1.4</td><td>600 label · 400 small</td></tr>
+      <tr><td>Overline</td><td style="font:600 11px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase">Transaction status</td><td class="tnum">11</td><td>600 · +8% caps</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">Also considered</h3>
+  <div class="grid g2">
+    <div class="card alt"><span class="over" style="color:var(--ink-3)">Schibsted Grotesk</span><span class="smp" style="font-family:'Schibsted Grotesk',var(--font-body);font-weight:700">UGX 185,000. Every step in view.</span><p class="note">Sturdy and newsroom-serious. It reads more like a publisher than a product people pay through. Good fallback if you want a sterner tone.</p></div>
+    <div class="card alt"><span class="over" style="color:var(--ink-3)">Manrope</span><span class="smp" style="font-family:'Manrope',var(--font-body);font-weight:700">UGX 185,000. Every step in view.</span><p class="note">Clean and friendly, but already used by many fintech and crypto products, so Paylink would look like everyone else without its logo.</p></div>
+  </div>
+</div></section>
+
+<!-- ================= COMPONENTS ================= -->
+<section class="sec" id="components"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">04 · Components</div>
+    <h2>The parts every screen is built from</h2>
+    <p>These map one-to-one to shadcn/ui primitives, restyled with Paylink tokens, so Phase 1 starts from accessible, tested building blocks. Screens look exactly as they will in the live product. Demo mode is signalled <b>by the account, not by each item</b>: a persistent Demo account bar and badge that cannot be dismissed.</p>
+  </div>
+  <div class="grid g2 ui" style="background:transparent">
+    <div class="kit ui">
+      <h4>Buttons</h4>
+      <div class="row"><button class="btn btn-p">Create payment link</button><button class="btn btn-s">Preview</button><span style="background:var(--u-navy);padding:6px;border-radius:14px;display:inline-flex"><button class="btn btn-e">On navy</button></span></div>
+      <div class="row"><button class="btn btn-q"><i data-lucide="copy" class="ic-s"></i>Copy link</button><button class="btn btn-d">Cancel transaction</button><button class="btn btn-p" disabled>Pay now</button></div>
+      <div class="row"><button class="btn btn-p btn-sm">Small</button><button class="btn btn-p">Default 44</button><button class="btn btn-p btn-lg">Large 52</button><button class="btn btn-s"><span class="spin" aria-hidden="true"></span>Creating…</button></div>
+      <p class="note" style="color:var(--u-ink3)">Primary is navy with an emerald label. On navy surfaces it flips to emerald with a navy label. One primary button per view, labels start with a verb, minimum height 44px on touch screens.</p>
+    </div>
+    <div class="kit ui">
+      <h4>Form fields</h4>
+      <div class="field"><label for="k-name">Item or service</label><input id="k-name" class="inp" value="Handwoven raffia basket set"><span class="hint">Buyers see this as the title of the payment.</span></div>
+      <div class="field"><label for="k-amt">Amount</label><div class="amt"><span>UGX</span><input id="k-amt" inputmode="numeric" value="185,000"></div></div>
+      <div class="field"><label for="k-ph">Buyer phone (optional)</label><input id="k-ph" class="inp err" value="0772 12"><span class="ferr"><i data-lucide="circle-alert" class="ic-s"></i>Enter a full 10-digit number, like 0772 123 456.</span></div>
+    </div>
+    <div class="kit ui">
+      <h4>Choices</h4>
+      <div class="field"><span class="lbl">Delivery</span><div class="seg" role="group" aria-label="Delivery method"><button aria-pressed="true">I deliver</button><button aria-pressed="false">Buyer collects</button><button aria-pressed="false">Courier</button></div></div>
+      <div class="field"><label for="k-exp">Link expires</label><select id="k-exp" class="inp sel"><option>In 7 days</option><option>In 24 hours</option><option>In 3 days</option><option>Never</option></select></div>
+      <label class="chk"><input type="checkbox" checked> Let buyers pay without creating an account</label>
+    </div>
+    <div class="kit ui">
+      <h4>Transaction status</h4>
+      <div class="row"><span class="pill p-pend"><span class="dot"></span>Awaiting payment</span><span class="ref">PENDING</span></div>
+      <div class="row"><span class="pill p-sec"><i data-lucide="lock" class="ic-s" style="width:13px;height:13px"></i>Payment secured</span><span class="ref">FUNDS_SECURED_DEMO</span></div>
+      <div class="row"><span class="pill p-done"><i data-lucide="check" class="ic-s" style="width:13px;height:13px"></i>Completed</span><span class="ref">COMPLETED</span></div>
+      <div class="row"><span class="pill p-fail"><i data-lucide="x" class="ic-s" style="width:13px;height:13px"></i>Payment failed</span><span class="ref">PAYMENT_FAILED</span></div>
+      <div class="row"><span class="pill p-canc"><span class="dot"></span>Cancelled</span><span class="ref">CANCELLED</span></div>
+      <p class="note" style="color:var(--u-ink3)">Every status has a colour <i>and</i> an icon or dot, so it never depends on colour alone. Labels read as they will in the live product. The enum keeps its <code>_DEMO</code> suffix in the database so demo records can never be mistaken for real ones.</p>
+    </div>
+    <div class="kit ui">
+      <h4>Demo account</h4>
+      <div class="ucard" style="overflow:hidden"><div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo account</b> · Payments are simulated. No real money moves.</span><span class="dlink">What this means</span></div>
+        <div style="padding:14px 14px 18px;display:flex;gap:12px;align-items:center"><span class="av-wrap"><span class="av">NC</span><span class="av-badge">Demo</span></span><div style="flex:1;min-width:0"><b style="display:block;font-size:14px">Nakato Crafts</b><span style="font-size:12.5px;color:var(--u-ink3)">Demo seller account</span></div><span class="pill p-sec"><i data-lucide="lock" class="ic-s" style="width:13px;height:13px"></i>Payment secured</span></div></div>
+      <div class="ucard welcome"><span class="w-ic"><i data-lucide="flask-conical" class="ic"></i></span><b>You're in a demo account</b><p>Everything works like the real Paylink, but payments are simulated. No money is charged, held or paid out, and buyers who open your links see the same notice.</p><span class="btn btn-p btn-sm" style="justify-self:start">Start exploring</span></div>
+      <p class="note" style="color:var(--u-ink3)">The bar sits above every signed-in screen and every checkout from a demo seller. The welcome dialog appears once, on first sign-in.</p>
+    </div>
+    <div class="kit ui">
+      <h4>Table</h4>
+      <div class="ucard" style="overflow-x:auto"><table class="utbl"><thead><tr><th>Reference</th><th>Item</th><th style="text-align:right">Amount</th><th>Status</th></tr></thead><tbody>
+        <tr><td class="ref">PL-7QK2M9</td><td>Raffia basket set</td><td class="num">185,000</td><td><span class="pill p-sec">Secured</span></td></tr>
+        <tr><td class="ref">PL-3HD8RA</td><td>Kitenge dress, size M</td><td class="num">95,000</td><td><span class="pill p-pend">Awaiting</span></td></tr>
+        <tr><td class="ref">PL-9WM2EC</td><td>Phone repair</td><td class="num">60,000</td><td><span class="pill p-done">Completed</span></td></tr>
+      </tbody></table></div>
+      <p class="note" style="color:var(--u-ink3)">Amounts right-aligned with tabular figures. On phones, tables become stacked rows (see mobile screens).</p>
+    </div>
+    <div class="kit ui">
+      <h4>Navigation</h4>
+      <div style="background:var(--u-navy);border-radius:12px;padding:10px 12px;display:grid;gap:2px">
+        <a class="navi on" href="#components"><i data-lucide="layout-grid" class="ic"></i>Overview</a>
+        <a class="navi" href="#components"><i data-lucide="link-2" class="ic"></i>Payment links</a>
+        <a class="navi" href="#components"><i data-lucide="arrow-left-right" class="ic"></i>Transactions</a>
+      </div>
+      <div class="utabs" role="tablist"><button class="on" role="tab" aria-selected="true">Details</button><button role="tab" aria-selected="false">History</button><button role="tab" aria-selected="false">Buyer</button></div>
+      <div class="row"><span class="fchip on">All <b>24</b></span><span class="fchip">Awaiting <b>5</b></span><span class="fchip">Completed <b>12</b></span></div>
+    </div>
+    <div class="kit ui">
+      <h4>Icons · Lucide, 1.75 stroke</h4>
+      <div class="icons">
+        <div><i data-lucide="link-2"></i>link-2</div><div><i data-lucide="lock"></i>lock</div><div><i data-lucide="truck"></i>truck</div><div><i data-lucide="package-check"></i>package-check</div>
+        <div><i data-lucide="clock-3"></i>clock-3</div><div><i data-lucide="circle-check"></i>circle-check</div><div><i data-lucide="circle-x"></i>circle-x</div><div><i data-lucide="store"></i>store</div>
+        <div><i data-lucide="search"></i>search</div><div><i data-lucide="share-2"></i>share-2</div><div><i data-lucide="life-buoy"></i>life-buoy</div><div><i data-lucide="flask-conical"></i>flask (demo)</div>
+      </div>
+      <p class="note" style="color:var(--u-ink3)">20px in UI, 16px inside pills and dense rows, 24px in empty states. Icons inherit text colour; emerald only when the icon itself means "done".</p>
+    </div>
+    <div class="kit ui">
+      <h4>Spacing · 4px base</h4>
+      <div style="display:grid;gap:8px">
+        <div class="space-row"><span>space-1</span><i style="width:4px"></i><span>4</span></div>
+        <div class="space-row"><span>space-2</span><i style="width:8px"></i><span>8</span></div>
+        <div class="space-row"><span>space-3</span><i style="width:12px"></i><span>12</span></div>
+        <div class="space-row"><span>space-4</span><i style="width:16px"></i><span>16</span></div>
+        <div class="space-row"><span>space-6</span><i style="width:24px"></i><span>24</span></div>
+        <div class="space-row"><span>space-8</span><i style="width:32px"></i><span>32</span></div>
+        <div class="space-row"><span>space-12</span><i style="width:48px"></i><span>48</span></div>
+        <div class="space-row"><span>space-16</span><i style="width:64px"></i><span>64</span></div>
+      </div>
+      <p class="note" style="color:var(--u-ink3)">16px gutters on phones, 24px on tablets, 32px+ on desktop. Gaps inside a card: 12–16px. Between sections: 32–48px.</p>
+    </div>
+    <div class="kit ui">
+      <h4>Radius &amp; elevation</h4>
+      <div class="rad">
+        <div style="border-radius:4px">xs 4<br>tags</div><div style="border-radius:8px">sm 8<br>chips</div><div style="border-radius:10px">md 10<br>buttons</div><div style="border-radius:14px">lg 14<br>cards</div><div style="border-radius:20px">xl 20<br>sheets</div>
+      </div>
+      <div class="shd">
+        <div style="border:1px solid var(--u-line)">border only<br>cards</div>
+        <div style="box-shadow:0 8px 24px -8px rgba(20,43,69,.16),0 2px 6px -2px rgba(20,43,69,.06)">shadow-md<br>menus</div>
+        <div style="box-shadow:0 24px 48px -16px rgba(20,43,69,.24)">shadow-lg<br>modals</div>
+      </div>
+      <p class="note" style="color:var(--u-ink3)">Borders first. Shadows only for things that float above the page: menus, sheets, modals, toasts. Shadows are tinted navy, never grey.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= SCREENS ================= -->
+<section class="sec" id="screens"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">05 · Interface exploration</div>
+    <h2>One system across six screens</h2>
+    <p>All names, amounts and counts below are sample content for the mockups. In the real product every figure comes from database records, and new accounts see the empty state instead. On a phone, the desktop frames scroll sideways.</p>
+  </div>
+
+  <!-- Landing -->
+  <div class="frame-cap"><h3>Landing page</h3><span class="sample">Sample content</span></div>
+  <div class="scroll-x"><div class="browser ui">
+    <div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="url"><i data-lucide="lock"></i>paylink.ug</span></div>
+    <div class="lnav">
+      <span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span>
+      <div class="links"><span>How it works</span><span>For sellers</span><span>For buyers</span><span>Help</span></div>
+      <div class="r"><span class="btn btn-q btn-sm">Sign in</span><span class="btn btn-p btn-sm">Create a payment link</span></div>
+    </div>
+    <div class="lhero">
+      <div>
+        <span class="lchip"><i></i>Built for people who sell on WhatsApp, Instagram and TikTok</span>
+        <h1>Buy and sell with people you've never met.</h1>
+        <p class="l">Create a Paylink for anything you sell. Your buyer sees who you are, what they're paying for and how it will be delivered, and you both follow the deal until it's done.</p>
+        <div class="row" style="margin-top:28px"><span class="btn btn-p btn-lg">Create a payment link<i data-lucide="arrow-right" class="ic"></i></span><span class="btn btn-s btn-lg">See how it works</span></div>
+        <div class="row" style="margin-top:22px;gap:18px;font-size:13.5px;color:var(--u-ink2)"><span class="row" style="gap:6px"><i data-lucide="eye" class="ic-s"></i>Buyers see the full deal first</span><span class="row" style="gap:6px"><i data-lucide="list-checks" class="ic-s"></i>Every step is recorded</span></div>
+      </div>
+      <div class="lstage">
+        <div class="lcard">
+          <div class="row" style="gap:10px"><span class="av">NC</span><div><b style="font-size:14px;display:block">Nakato Crafts</b><span style="font-size:12px;color:var(--u-ink3)">12 completed deals on Paylink</span></div></div>
+          <div style="height:1px;background:var(--u-line-soft)"></div>
+          <b style="font-size:15px">Handwoven raffia basket set (3)</b>
+          <div style="font:650 28px/1 var(--font-display);letter-spacing:-.03em" class="tnum"><small style="font:600 13px var(--font-body);color:var(--u-ink2);margin-right:4px">UGX</small>185,000</div>
+          <div class="kv"><i data-lucide="truck" class="ic-s" style="margin-top:2px"></i><span>Delivered to Ntinda, Kampala in 2–3 days</span></div>
+          <span class="btn btn-p btn-blk">Pay UGX 185,000</span>
+        </div>
+        <div class="lfloat">
+          <div class="row"><span class="pill p-sec"><i data-lucide="lock" class="ic-s" style="width:13px;height:13px"></i>Payment secured</span></div>
+          <div class="prog"><i style="width:60%"></i></div>
+          <span style="font-size:12.5px;color:var(--u-ink2)">Next: seller delivers · then buyer confirms</span>
+        </div>
+      </div>
+    </div>
+    <div class="steps3">
+      <div class="ucard"><span class="sn">1</span><b>Seller creates a link</b><span style="font-size:14px;color:var(--u-ink2)">Item, price and delivery terms in one minute. Share it in any chat.</span></div>
+      <div class="ucard"><span class="sn">2</span><b>Buyer reviews and pays</b><span style="font-size:14px;color:var(--u-ink2)">They see the seller, the item and the delivery plan before paying.</span></div>
+      <div class="ucard"><span class="sn">3</span><b>Both track it to the door</b><span style="font-size:14px;color:var(--u-ink2)">Each step is logged, and the deal completes when the buyer confirms.</span></div>
+    </div>
+  </div></div>
+
+  <!-- Dashboard -->
+  <div class="frame-cap"><h3>Seller dashboard</h3><span class="sample">Sample content</span></div>
+  <div class="scroll-x"><div class="browser ui">
+    <div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="url"><i data-lucide="lock"></i>paylink.ug/dashboard</span></div>
+    <div class="dash">
+      <aside class="side">
+        <span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span>
+        <a class="navi on" href="#screens"><i data-lucide="layout-grid" class="ic"></i>Overview</a>
+        <a class="navi" href="#screens"><i data-lucide="link-2" class="ic"></i>Payment links</a>
+        <a class="navi" href="#screens"><i data-lucide="arrow-left-right" class="ic"></i>Transactions</a>
+        <a class="navi" href="#screens"><i data-lucide="settings" class="ic"></i>Settings</a>
+        <a class="navi" href="#screens"><i data-lucide="life-buoy" class="ic"></i>Help</a>
+        <span class="sp"></span>
+        <div class="me"><span class="av-wrap"><span class="av">NC</span><span class="av-badge">Demo</span></span><div>Nakato Crafts<small>Demo seller account</small></div></div>
+      </aside>
+      <div class="dmain">
+        <div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo account</b> · Payments are simulated. No real money moves through Paylink yet.</span><span class="dlink">What this means</span></div>
+        <div class="dtop">
+          <h2 style="font-size:24px;margin-right:auto">Overview</h2>
+          <span class="search"><i data-lucide="search" class="ic-s"></i>Search item, buyer or reference</span>
+          <span class="btn btn-p"><i data-lucide="plus" class="ic"></i>New payment link</span>
+        </div>
+        <div class="dbody">
+          <div class="stats4">
+            <div class="ucard stat"><span class="k">All transactions</span><span class="v">24</span><span class="s">Since 2 Oct 2026</span></div>
+            <div class="ucard stat"><span class="k">In progress</span><span class="v">8</span><span class="s">5 awaiting payment · 3 secured</span></div>
+            <div class="ucard stat"><span class="k">Completed</span><span class="v">12</span><span class="s">UGX 2,940,000</span></div>
+            <div class="ucard stat"><span class="k">Failed or cancelled</span><span class="v">4</span><span class="s">3 failed · 1 cancelled</span></div>
+          </div>
+          <div class="dgrid">
+            <div class="ucard" style="overflow:hidden">
+              <div style="display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--u-line);flex-wrap:wrap">
+                <b style="font-size:15px;margin-right:auto">Transactions</b>
+                <span class="fchip on">All <b>24</b></span><span class="fchip">Awaiting <b>5</b></span><span class="fchip">Secured <b>3</b></span><span class="fchip">Completed <b>12</b></span><span class="fchip">Failed <b>3</b></span>
+              </div>
+              <table class="utbl"><thead><tr><th>Reference</th><th>Item</th><th>Buyer</th><th style="text-align:right">Amount (UGX)</th><th>Status</th><th>Updated</th></tr></thead><tbody>
+                <tr><td class="ref">PL-7QK2M9</td><td>Raffia basket set (3)</td><td>Grace A.</td><td class="num">185,000</td><td><span class="pill p-sec">Payment secured</span></td><td style="color:var(--u-ink3)">10 min ago</td></tr>
+                <tr><td class="ref">PL-3HD8RA</td><td>Kitenge dress, size M</td><td style="color:var(--u-ink3)">Not yet opened</td><td class="num">95,000</td><td><span class="pill p-pend">Awaiting payment</span></td><td style="color:var(--u-ink3)">1 h ago</td></tr>
+                <tr><td class="ref">PL-9WM2EC</td><td>Screen replacement</td><td>Brian K.</td><td class="num">60,000</td><td><span class="pill p-done">Completed</span></td><td style="color:var(--u-ink3)">Yesterday</td></tr>
+                <tr><td class="ref">PL-5TN4VB</td><td>Shea butter, 6 jars</td><td>Esther N.</td><td class="num">72,000</td><td><span class="pill p-fail">Payment failed</span></td><td style="color:var(--u-ink3)">Yesterday</td></tr>
+                <tr><td class="ref">PL-2PX7LQ</td><td>Bark cloth table runner</td><td>Moses O.</td><td class="num">48,000</td><td><span class="pill p-canc">Cancelled</span></td><td style="color:var(--u-ink3)">5 Nov</td></tr>
+                <tr><td class="ref">PL-8CJ1ZD</td><td>Beaded sandals</td><td>Joan T.</td><td class="num">55,000</td><td><span class="pill p-done">Completed</span></td><td style="color:var(--u-ink3)">4 Nov</td></tr>
+              </tbody></table>
+            </div>
+            <div class="ucard feed">
+              <b style="font-size:15px">Recent activity</b>
+              <div class="ev"><span class="ei" style="background:var(--u-em-tint);color:var(--u-em-ink)"><i data-lucide="lock" class="ic-s"></i></span><div>Grace A. paid for <b>PL-7QK2M9</b><small>10 min ago</small></div></div>
+              <div class="ev"><span class="ei" style="background:var(--u-info-bg);color:var(--u-info)"><i data-lucide="link-2" class="ic-s"></i></span><div>You created a link for Kitenge dress<small>1 h ago</small></div></div>
+              <div class="ev"><span class="ei" style="background:var(--u-em);color:var(--u-navy)"><i data-lucide="check" class="ic-s"></i></span><div>Brian K. confirmed delivery of <b>PL-9WM2EC</b><small>Yesterday</small></div></div>
+              <div class="ev"><span class="ei" style="background:var(--u-danger-bg);color:var(--u-danger)"><i data-lucide="x" class="ic-s"></i></span><div>Payment failed for <b>PL-5TN4VB</b><small>Yesterday</small></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="frame-cap"><h3>Dashboard · new account</h3><p>No zeros pretending to be data: a new seller sees one clear next step.</p></div>
+  <div class="ui ucard empty">
+    <span class="em-mark"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true" style="--m1:#142B45"><use href="#mark-b"/></svg></span>
+    <h3 style="font-size:20px">No transactions yet</h3>
+    <p>Create a payment link and share it with a buyer. When they open it or pay, you'll see it here with every step recorded.</p>
+    <div class="row" style="justify-content:center;margin-top:6px"><span class="btn btn-p"><i data-lucide="plus" class="ic"></i>Create your first payment link</span><span class="btn btn-q">How Paylink works</span></div>
+  </div>
+
+  <!-- Create link -->
+  <div class="frame-cap"><h3>Create payment link</h3><span class="sample">Sample content</span></div>
+  <div class="scroll-x"><div class="browser ui">
+    <div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="url"><i data-lucide="lock"></i>paylink.ug/links/new</span></div>
+    <div class="create">
+      <div style="display:grid;gap:16px">
+        <div><span style="font-size:13px;color:var(--u-ink3)">Payment links /</span><h2 style="font-size:28px;margin-top:4px">New payment link</h2></div>
+        <div class="ucard fsec">
+          <h3>What are you selling?</h3>
+          <div class="field"><label for="c1">Item or service</label><input id="c1" class="inp" value="Handwoven raffia basket set (3)"></div>
+          <div class="field"><label for="c2">Description</label><textarea id="c2" class="inp">Set of three nesting baskets, natural and indigo. Largest is 35 cm across. Made to order in Kampala.</textarea><span class="hint">Be specific: size, colour, condition. It protects you if there's a disagreement later.</span></div>
+          <div class="field"><label for="c3">Amount</label><div class="amt"><span>UGX</span><input id="c3" value="185,000"></div></div>
+        </div>
+        <div class="ucard fsec">
+          <h3>Delivery</h3>
+          <div class="seg" role="group" aria-label="Delivery method"><button aria-pressed="true">I deliver</button><button aria-pressed="false">Buyer collects</button><button aria-pressed="false">Courier</button></div>
+          <div class="f2">
+            <div class="field"><label for="c4">Delivery area</label><input id="c4" class="inp" value="Kampala and Wakiso"></div>
+            <div class="field"><label for="c5">Delivered within</label><select id="c5" class="inp sel"><option>2–3 days after payment</option></select></div>
+          </div>
+        </div>
+        <div class="ucard fsec">
+          <h3>Link settings</h3>
+          <div class="f2">
+            <div class="field"><label for="c6">Link expires</label><select id="c6" class="inp sel"><option>In 7 days · 15 Nov 2026</option></select></div>
+            <div class="field"><label for="c7">Quantity</label><input id="c7" class="inp" value="1"></div>
+          </div>
+        </div>
+        <div class="row" style="justify-content:flex-end"><span class="btn btn-q">Save as draft</span><span class="btn btn-p btn-lg">Create payment link</span></div>
+      </div>
+      <div style="display:grid;gap:16px;position:sticky;top:0">
+        <span class="lbl" style="color:var(--u-ink3);font-size:11px;letter-spacing:.08em;text-transform:uppercase">What your buyer will see</span>
+        <div class="ucard" style="padding:16px;display:grid;gap:12px;border-radius:20px">
+          <div class="row" style="gap:10px"><span class="av">NC</span><div><b style="font-size:14px;display:block">Nakato Crafts</b><span style="font-size:12px;color:var(--u-ink3)">On Paylink since Oct 2026</span></div></div>
+          <b>Handwoven raffia basket set (3)</b>
+          <div style="font:650 26px/1 var(--font-display);letter-spacing:-.03em" class="tnum"><small style="font:600 13px var(--font-body);color:var(--u-ink2);margin-right:4px">UGX</small>185,000</div>
+          <div class="kv"><i data-lucide="truck" class="ic-s" style="margin-top:2px"></i><span>Seller delivers in Kampala and Wakiso, 2–3 days after payment</span></div>
+          <span class="btn btn-p btn-blk" aria-disabled="true">Pay UGX 185,000</span>
+        </div>
+        <div class="ucard" style="padding:16px;display:grid;gap:12px;border-color:var(--u-em)">
+          <div class="row" style="gap:8px"><i data-lucide="circle-check" class="ic" style="color:var(--u-em-ink)"></i><b>Link ready to share</b></div>
+          <div style="display:flex;gap:8px"><span class="inp" style="display:flex;align-items:center;font:500 14px var(--font-mono);background:var(--u-sunken)">paylink.ug/p/7QK2M9</span><span class="btn btn-s" style="padding:0 12px" aria-label="Copy link"><i data-lucide="copy" class="ic-s"></i></span></div>
+          <div class="row"><span class="btn btn-p btn-sm"><i data-lucide="share-2" class="ic-s"></i>Share link</span><span class="btn btn-q btn-sm">Open as buyer</span></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- Phones -->
+  <div class="frame-cap"><h3>Buyer checkout, payment, status &amp; mobile navigation</h3><span class="sample">Sample content</span></div>
+  <div class="phones">
+    <!-- checkout -->
+    <div class="phone-wrap">
+      <div class="phone ui">
+        <div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>
+        <div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo payment link</b> · You won't be charged.</span></div>
+        <div class="ph-head"><span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><span class="ref">PL-7QK2M9</span></div>
+        <div class="ph-body">
+          <div class="ucard seller"><span class="av">NC</span><div style="flex:1"><b>Nakato Crafts</b><small>12 completed deals · since Oct 2026</small></div></div>
+          <div class="ucard item">
+            <b style="font-size:16px">Handwoven raffia basket set (3)</b>
+            <span style="font-size:13.5px;color:var(--u-ink2)">Set of three nesting baskets, natural and indigo. Largest is 35 cm across.</span>
+            <div class="price"><small>UGX</small>185,000</div>
+          </div>
+          <div class="ucard" style="padding:14px;display:grid;gap:10px">
+            <div class="kv"><i data-lucide="truck" class="ic-s" style="margin-top:2px"></i><div><b>Seller delivers</b>Ntinda, Kampala · 2–3 days after payment</div></div>
+            <div class="kv"><i data-lucide="clock-3" class="ic-s" style="margin-top:2px"></i><div><b>Link expires 15 Nov 2026</b></div></div>
+          </div>
+          <div class="how"><b style="font-size:13.5px">How Paylink works</b><ol><li>You pay through this link.</li><li>The seller delivers your order.</li><li>You confirm it arrived, and the deal completes.</li></ol></div>
+        </div>
+        <div class="ph-foot"><span class="btn btn-p btn-lg btn-blk">Pay UGX 185,000</span><small>No account needed to pay</small></div>
+      </div>
+      <div class="cap"><b>Buyer checkout</b><span>Everything the buyer needs to decide, in reading order: who, what, how much, how it arrives.</span></div>
+    </div>
+    <!-- payment sheet -->
+    <div class="phone-wrap">
+      <div class="phone ui">
+        <div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>
+        <div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo payment link</b> · You won't be charged.</span></div>
+        <div class="ph-head"><span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><span class="ref">PL-7QK2M9</span></div>
+        <div class="ph-body"><div class="ucard seller"><span class="av">NC</span><div><b>Nakato Crafts</b><small>12 completed deals</small></div></div><div class="ucard item"><b>Handwoven raffia basket set (3)</b><div class="price"><small>UGX</small>185,000</div></div></div>
+        <div class="sheet-bg"></div>
+        <div class="sheet" role="dialog" aria-label="Pay with mobile money">
+          <span class="grab"></span>
+          <div class="row" style="justify-content:space-between"><h3 style="font-size:19px">Pay UGX 185,000</h3><i data-lucide="x" class="ic" style="color:var(--u-ink3)"></i></div>
+          <div class="opt on"><span class="radio"></span><div><b>MTN Mobile Money</b><small>Approve on your phone</small></div></div>
+          <div class="opt"><span class="radio"></span><div><b>Airtel Money</b><small>Approve on your phone</small></div></div>
+          <div class="field"><label for="pm1">Mobile money number</label><input id="pm1" class="inp" value="0772 123 456" inputmode="tel"></div>
+          <div class="demo-out"><span><i data-lucide="flask-conical" class="ic-s"></i>Demo outcome</span><div class="seg" role="group" aria-label="Demo outcome"><button aria-pressed="true">Succeeds</button><button aria-pressed="false">Fails</button><button aria-pressed="false">Cancelled</button></div></div>
+          <span class="btn btn-p btn-lg btn-blk">Pay UGX 185,000</span>
+        </div>
+      </div>
+      <div class="cap"><b>Payment step</b><span>Looks like the real mobile-money step. In demo mode one extra panel lets the tester choose the outcome; nothing is sent to a provider.</span></div>
+    </div>
+    <!-- status -->
+    <div class="phone-wrap">
+      <div class="phone ui">
+        <div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>
+        <div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo account</b> · No real money has moved.</span></div>
+        <div class="ph-head"><span class="row" style="gap:8px"><i data-lucide="chevron-left" class="ic"></i><b style="font-size:15px">Transaction</b></span><span class="ref">PL-7QK2M9</span></div>
+        <div class="ph-body" style="padding:12px 16px">
+          <div class="ucard" style="overflow:hidden">
+            <div class="shero"><span class="lk"><i data-lucide="lock" class="ic"></i></span><h3>Payment secured</h3><p>Nakato Crafts has been told to deliver your order.</p></div>
+            <div class="tl">
+              <div class="tli done"><span class="tdot"><i data-lucide="check" class="ic-s" style="width:14px;height:14px"></i></span><div><b>Link created</b><small>6 Nov, 10:14</small></div></div>
+              <div class="tli done"><span class="tdot"><i data-lucide="check" class="ic-s" style="width:14px;height:14px"></i></span><div><b>Buyer reviewed the deal</b><small>8 Nov, 15:02</small></div></div>
+              <div class="tli now"><span class="tdot"></span><div><b>Payment secured</b><small>8 Nov, 15:04</small></div></div>
+              <div class="tli todo"><span class="tdot"></span><div><b>Delivered</b><small>Expected by 11 Nov</small></div></div>
+              <div class="tli todo"><span class="tdot"></span><div><b>Completed</b><small>When you confirm delivery</small></div></div>
+            </div>
+          </div>
+          <div class="ucard" style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13.5px"><span>Raffia basket set (3)</span><b class="tnum">UGX 185,000</b></div>
+        </div>
+        <div class="ph-foot"><span class="btn btn-p btn-lg btn-blk">I've received my order</span><span class="btn btn-q btn-blk">Get help with this deal</span></div>
+      </div>
+      <div class="cap"><b>Transaction status</b><span>A single timeline both parties share. The demo bar replaces any per-step demo labels.</span></div>
+    </div>
+    <!-- mobile nav home -->
+    <div class="phone-wrap">
+      <div class="phone ui">
+        <div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>
+        <div class="ph-head"><span class="lockup"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#mark-b"/></svg><span class="wm">payl<span class="wi">ı</span>nk</span></span><span class="row" style="gap:14px;color:var(--u-ink2)"><i data-lucide="search" class="ic"></i><i data-lucide="bell" class="ic"></i></span></div>
+        <div class="demobar"><i data-lucide="flask-conical" class="ic-s"></i><span><b>Demo account</b> · Payments are simulated.</span></div>
+        <div class="ph-body">
+          <h3 style="font-size:22px">Good afternoon, Nakato</h3>
+          <div class="hs">
+            <div class="ucard stat"><span class="k">In progress</span><span class="v">8</span><span class="s">5 awaiting payment</span></div>
+            <div class="ucard stat"><span class="k">Completed</span><span class="v">12</span><span class="s">This month</span></div>
+            <div class="ucard stat"><span class="k">Failed</span><span class="v">3</span><span class="s">1 cancelled</span></div>
+          </div>
+          <div class="row" style="justify-content:space-between"><b style="font-size:15px">Recent</b><span style="font-size:13px;color:var(--u-em-ink);font-weight:600">See all</span></div>
+          <div class="ucard">
+            <div class="mrow"><div class="t"><b>Raffia basket set (3)</b><small>Grace A. · 10 min ago</small></div><div class="a"><b class="tnum">185,000</b><span class="pill p-sec" style="height:20px;font-size:11px">Secured</span></div></div>
+            <div class="mrow"><div class="t"><b>Kitenge dress, size M</b><small>Not opened · 1 h ago</small></div><div class="a"><b class="tnum">95,000</b><span class="pill p-pend" style="height:20px;font-size:11px">Awaiting</span></div></div>
+            <div class="mrow"><div class="t"><b>Screen replacement</b><small>Brian K. · Yesterday</small></div><div class="a"><b class="tnum">60,000</b><span class="pill p-done" style="height:20px;font-size:11px">Completed</span></div></div>
+          </div>
+        </div>
+        <nav class="tabnav" aria-label="Seller navigation">
+          <a class="on" href="#screens"><i data-lucide="house" class="ic"></i>Home</a>
+          <a href="#screens"><i data-lucide="link-2" class="ic"></i>Links</a>
+          <a href="#screens" aria-label="New payment link"><span class="fab"><i data-lucide="plus" class="ic"></i></span></a>
+          <a href="#screens"><i data-lucide="arrow-left-right" class="ic"></i>Activity</a>
+          <a href="#screens"><i data-lucide="circle-user-round" class="ic"></i>Account</a>
+        </nav>
+      </div>
+      <div class="cap"><b>Mobile navigation</b><span>Four destinations and one raised action. Creating a link is always one thumb-tap away.</span></div>
+    </div>
+    <!-- filter sheet -->
+    <div class="phone-wrap">
+      <div class="phone ui">
+        <div class="sbar"><span>9:41</span><span class="isl"></span><span>5G</span></div>
+        <div class="ph-head"><b style="font-size:17px;font-family:var(--font-display)">Activity</b><i data-lucide="sliders-horizontal" class="ic"></i></div>
+        <div class="ph-body"><div class="ucard"><div class="mrow"><div class="t"><b>Raffia basket set (3)</b><small>PL-7QK2M9</small></div></div><div class="mrow"><div class="t"><b>Kitenge dress, size M</b><small>PL-3HD8RA</small></div></div></div></div>
+        <div class="sheet-bg"></div>
+        <div class="sheet" role="dialog" aria-label="Filter transactions">
+          <span class="grab"></span>
+          <div class="row" style="justify-content:space-between"><h3 style="font-size:19px">Filter transactions</h3><span style="font-size:14px;color:var(--u-em-ink);font-weight:600">Clear</span></div>
+          <span class="lbl">Status</span>
+          <div class="row" style="gap:8px"><span class="fchip on">All <b>24</b></span><span class="fchip">Awaiting <b>5</b></span><span class="fchip">Secured <b>3</b></span><span class="fchip">Completed <b>12</b></span><span class="fchip">Failed <b>3</b></span><span class="fchip">Cancelled <b>1</b></span></div>
+          <span class="lbl">Date</span>
+          <div class="seg"><button aria-pressed="false">7 days</button><button aria-pressed="true">30 days</button><button aria-pressed="false">All time</button></div>
+          <span class="btn btn-p btn-lg btn-blk">Show 24 transactions</span>
+        </div>
+      </div>
+      <div class="cap"><b>Bottom sheet</b><span>Filters, menus and confirmations rise from the bottom on phones and become dropdowns on desktop.</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= MOTION ================= -->
+<section class="sec" id="motion"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">06 · Motion</div>
+    <h2>Movement that confirms, never decorates</h2>
+    <p>Motion is used to say "that worked" or "this changed". Everything here runs on four durations and one easing curve. In the app they're implemented with Motion for React using the same values. Try each demo, then switch on reduced motion to see the fallback.</p>
+    <label class="switch"><input type="checkbox" id="rmToggle"> Preview reduced motion</label>
+  </div>
+  <div class="lab ui" style="background:transparent">
+    <div class="kit">
+      <h4>Transaction status change</h4>
+      <div class="stbox" id="stbox">
+        <div class="stline"><b class="ref" style="font-size:13px">PL-7QK2M9 · UGX 185,000</b><span id="stpill" class="pill pillx p-pend"><span class="dot"></span>Awaiting payment</span></div>
+        <div class="prog"><i id="stprog" style="width:20%"></i></div>
+        <span id="stmsg" style="font-size:13px;color:var(--u-ink2)">The buyer hasn't paid yet.</span>
+      </div>
+      <div class="row"><button class="btn btn-p btn-sm" id="stOk">Run: payment succeeds</button><button class="btn btn-s btn-sm" id="stFail">Run: payment fails</button><button class="btn btn-q btn-sm" id="stReset">Reset</button></div>
+      <p>Status pills crossfade colour over 220ms; the progress bar eases over 600ms; the new pill scales in once. Failure never shakes. It turns red and explains what to do.</p>
+    </div>
+    <div class="kit">
+      <h4>Button feedback</h4>
+      <div class="row"><button class="btn btn-p" id="bfBtn" style="min-width:210px">Create payment link</button></div>
+      <div id="toastSlot" style="min-height:48px"><div class="toast" id="toast" role="status"><i data-lucide="circle-check" class="ic"></i>Link created. Copied to clipboard.</div></div>
+      <p>Press scales to 97% in 80ms. While working, the label is replaced by a spinner and a verb in progress ("Creating…"), the button keeps its width, and a toast confirms the result.</p>
+    </div>
+    <div class="kit">
+      <h4>Dropdown &amp; modal</h4>
+      <div class="row">
+        <div class="menu-anchor"><button class="btn btn-s btn-sm" id="ddBtn" aria-expanded="false" aria-haspopup="menu">Status: All<i data-lucide="chevron-down" class="ic-s"></i></button>
+          <div class="menu" id="dd" role="menu"><button role="menuitem"><span class="pill p-pend" style="height:20px"><span class="dot"></span>Awaiting</span></button><button role="menuitem"><span class="pill p-sec" style="height:20px">Secured</span></button><button role="menuitem"><span class="pill p-done" style="height:20px">Completed</span></button></div></div>
+        <button class="btn btn-d btn-sm" id="mdBtn">Cancel transaction…</button>
+      </div>
+      <div class="stage-modal" id="md">
+        <div class="mstage-in"><span style="font-size:13px;color:var(--u-ink3)">Page content</span></div>
+        <div class="mback" id="mdBack"></div>
+        <div class="mpanel" role="dialog" aria-modal="true" aria-labelledby="mdT"><h4 id="mdT">Cancel PL-7QK2M9?</h4><p>Grace A. will be told the deal is off. This can't be undone.</p><div class="row" style="justify-content:flex-end"><button class="btn btn-q btn-sm" id="mdKeep">Keep transaction</button><button class="btn btn-d btn-sm" id="mdGo">Cancel transaction</button></div></div>
+      </div>
+      <p>Menus grow from their trigger (96% → 100%, 220ms). Modals fade the backdrop and lift the panel 8px (360ms). Destructive confirmations name the thing being destroyed.</p>
+    </div>
+    <div class="kit">
+      <h4>Loading &amp; page transitions</h4>
+      <div class="ucard" style="padding:14px;display:grid;gap:12px" id="skBox"></div>
+      <div class="row"><button class="btn btn-s btn-sm" id="skBtn">Reload rows</button></div>
+      <div class="utabs" role="tablist"><button class="on" data-pg="0" role="tab" aria-selected="true">Details</button><button data-pg="1" role="tab" aria-selected="false">History</button></div>
+      <div class="pagebox">
+        <div class="pg" aria-hidden="false"><b>Delivery details</b><span style="font-size:13.5px;color:var(--u-ink2)">Seller delivers to Ntinda, Kampala in 2–3 days after payment.</span></div>
+        <div class="pg" aria-hidden="true"><b>History</b><span style="font-size:13.5px;color:var(--u-ink2)">Link created 6 Nov · Payment secured 8 Nov</span></div>
+      </div>
+      <p>Under 100ms: show nothing. Up to a second: an inline spinner. Longer: skeletons shaped like the content. Pages and tabs crossfade with a 12px slide in the direction of travel.</p>
+    </div>
+    <div class="kit" style="grid-column:1/-1">
+      <h4>Duration tokens · press to compare</h4>
+      <div class="dur" id="dur">
+        <div class="r"><span>instant 80ms</span><div class="track"><span class="ball" style="transition:transform var(--dur-instant) var(--ease-out)"></span></div></div>
+        <div class="r"><span>fast 140ms</span><div class="track"><span class="ball" style="transition:transform var(--dur-fast) var(--ease-out)"></span></div></div>
+        <div class="r"><span>base 220ms</span><div class="track"><span class="ball" style="transition:transform var(--dur-base) var(--ease-out)"></span></div></div>
+        <div class="r"><span>slow 360ms</span><div class="track"><span class="ball" style="transition:transform var(--dur-slow) var(--ease-out)"></span></div></div>
+        <div class="r"><span>status 600ms</span><div class="track"><span class="ball" style="transition:transform var(--dur-status) var(--ease-out)"></span></div></div>
+      </div>
+      <div class="row"><button class="btn btn-s btn-sm" id="durBtn">Run</button><span class="note" style="color:var(--u-ink3)">Easing for all: <code>cubic-bezier(.22, 1, .36, 1)</code> · reduced motion sets every duration to 0 and replaces slides with instant swaps.</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= RESPONSIVE ================= -->
+<section class="sec" id="responsive"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">07 · Responsive</div>
+    <h2>Designed at 375px first</h2>
+    <p>Most buyers will open a Paylink from a chat on a mid-range Android phone, often on a slow connection. Checkout, payment links and tracking are designed for that phone first and then given more room on bigger screens.</p>
+  </div>
+  <div class="bp">
+    <div class="card"><span class="over">Phone · &lt;640</span><b>One column</b><p>Bottom tab bar, sticky bottom action on checkout, bottom sheets for menus and filters, tables become stacked rows. 16px gutters, 44px touch targets.</p></div>
+    <div class="card"><span class="over">Tablet · 640–1023</span><b>Two columns</b><p>Checkout stays one centred column (max 560px). The dashboard keeps bottom navigation and shows stats in a 2×2 grid.</p></div>
+    <div class="card"><span class="over">Laptop · 1024–1279</span><b>Sidebar appears</b><p>Navy sidebar replaces the tab bar. Tables show in full. Create-link gets its live buyer preview column.</p></div>
+    <div class="card"><span class="over">Desktop · ≥1280</span><b>Capped width</b><p>Content stops at 1200px and centres. Extra width goes to whitespace, not to stretched forms; forms stay ≤680px.</p></div>
+  </div>
+  <p class="note" style="margin-top:16px">Performance budget for the checkout page: under 150 KB of JavaScript on first load, fonts subset to Latin, no images required to complete a payment.</p>
+</div></section>
+
+<!-- ================= DIRECTION ================= -->
+<section class="sec" id="direction"><div class="wrap" style="display:grid;gap:28px">
+  <div class="dir">
+    <div class="over" style="color:#3CC9AA">08 · Recommended direction</div>
+    <h2>Calm structure, one green signal, and nothing hidden.</h2>
+    <p>The <b style="color:#F7F9FC">Interlock</b> mark, Bricolage Grotesque over Instrument Sans, and the emerald-on-navy button as the signature interaction. Product screens stay light and spacious; navy is used for structure (the seller sidebar, headings, the app icon), and emerald appears only where the user acts or where a deal moved forward. A seller should be able to recognise a Paylink screenshot in a WhatsApp chat with the logo cropped out.</p>
+    <div class="cols">
+      <div><h3>What makes it Paylink</h3><ul><li>Emerald labels on navy buttons</li><li>Shared vertical timeline on every transaction</li><li>Monospace references like PL-7QK2M9</li><li>One persistent Demo account bar instead of demo tags everywhere</li></ul></div>
+      <div><h3>What it avoids</h3><ul><li>Shields, padlock heroes, banking columns</li><li>Gradients, glass effects and stock photos</li><li>Fake metrics or zero-filled dashboards</li><li>Real-money wording on any screen without the Demo account bar</li></ul></div>
+      <div><h3>How Phase 1 uses it</h3><ul><li>Next.js + Tailwind theme generated from <code style="background:rgba(247,249,252,.08);color:#F7F9FC">tokens.css</code></li><li>shadcn/ui primitives restyled with these tokens</li><li>Lucide icons, Motion for React</li><li>Light theme ships first; dark tokens are ready</li></ul></div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="sub" style="margin-top:8px">Decisions</h3>
+    <ol class="ask">
+      <li><div><b>Logo · Interlock (B)</b><span>Selected. Navy and emerald woven frames, lowercase wordmark with an emerald tittle.</span></div></li>
+      <li><div><b>Primary button · emerald label on navy</b><span>Selected. 4.78 : 1 contrast; flips to emerald with a navy label on navy surfaces.</span></div></li>
+      <li><div><b>Typography · Bricolage Grotesque + Instrument Sans</b><span>Approved.</span></div></li>
+      <li><div><b>Demo mode · real-looking screens, account-level notice</b><span>Selected. Persistent Demo account bar and avatar badge, a one-time welcome dialog, a notice on checkouts from demo sellers, and a demo outcome panel on the payment step.</span></div></li>
+      <li><div><b>Domain</b><span>Deferred. <code>paylink.ug</code> stays as a placeholder.</span></div></li>
+    </ol>
+  </div>
+</div></section>
+
+<!-- ================= TOKENS ================= -->
+<section class="sec" id="tokens"><div class="wrap">
+  <div class="sec-head">
+    <div class="over">09 · Tokens &amp; files</div>
+    <h2>What every later phase inherits</h2>
+    <p>Components read semantic tokens (<code>--color-action</code>), never raw hex values, so a colour adjustment happens in one place. The files below are already in the project folder.</p>
+  </div>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>Group</th><th>Tokens</th><th>Values</th></tr></thead>
+    <tbody>
+      <tr><td><b>Brand</b></td><td class="mono">--pl-navy · --pl-emerald · --pl-cloud</td><td class="mono">#142B45 · #10A88A · #F7F9FC</td></tr>
+      <tr><td><b>Roles</b></td><td class="mono">--color-bg / surface / text / text-secondary / border / action / on-action / link</td><td>Light values above; dark set under <code>[data-theme="dark"]</code></td></tr>
+      <tr><td><b>Status</b></td><td class="mono">--status-{pending, secured, completed, failed, cancelled, demo}-{fg, bg}</td><td>Info · Emerald 700 · Emerald · Danger · Slate · Warning</td></tr>
+      <tr><td><b>Type</b></td><td class="mono">--font-display / body / mono · --text-display … --text-overline</td><td>Bricolage Grotesque · Instrument Sans · IBM Plex Mono</td></tr>
+      <tr><td><b>Spacing</b></td><td class="mono">--space-0 … --space-24</td><td class="tnum">0, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96</td></tr>
+      <tr><td><b>Radius</b></td><td class="mono">--radius-xs / sm / md / lg / xl / full</td><td class="tnum">4 · 8 · 10 · 14 · 20 · 999</td></tr>
+      <tr><td><b>Elevation</b></td><td class="mono">--shadow-xs / sm / md / lg · --ring-focus</td><td>Navy-tinted; floating layers only</td></tr>
+      <tr><td><b>Motion</b></td><td class="mono">--dur-instant / fast / base / slow / status · --ease-out / in-out</td><td class="tnum">80 · 140 · 220 · 360 · 600ms</td></tr>
+      <tr><td><b>Layout</b></td><td class="mono">--container-max · --content-max · --sidebar-w · --tap-min</td><td class="tnum">1200 · 680 · 248 · 44px</td></tr>
+    </tbody>
+  </table></div>
+  <h3 class="sub">Files</h3>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>Path</th><th>Contents</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">design-system/tokens.css</td><td>All CSS custom properties, light and dark, with reduced-motion overrides</td></tr>
+      <tr><td class="mono">design-system/tokens.json</td><td>The same tokens as data, for the Tailwind theme and future native apps</td></tr>
+      <tr><td class="mono">design-system/logos/</td><td>Mark, reversed mark, app icon and favicon SVGs for concepts A, B and C</td></tr>
+      <tr><td class="mono">design-system/DESIGN_SYSTEM.md</td><td>Written rules: colour roles, type, components, motion, copy and demo labelling</td></tr>
+      <tr><td class="mono">design-system/brand-exploration.html</td><td>This page</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">Paylink brand &amp; design system v0.2 · Revised 8 Nov 2026 · All screen content is sample data · Payments shown are simulated</div></footer>
+
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>
+(function(){
+  try{ if(window.lucide) lucide.createIcons({attrs:{'stroke-width':1.75}}); }catch(e){}
+  var root=document.documentElement;
+  var rmT=document.getElementById('rmToggle');
+  rmT.addEventListener('change',function(){root.classList.toggle('rm',rmT.checked)});
+
+  function icon(name,cls){return '<i data-lucide="'+name+'" class="'+(cls||'ic-s')+'" style="width:13px;height:13px"></i>'}
+  function refresh(){try{if(window.lucide) lucide.createIcons({attrs:{'stroke-width':1.75}})}catch(e){}}
+
+  // status demo
+  var pill=document.getElementById('stpill'),prog=document.getElementById('stprog'),msg=document.getElementById('stmsg'),timer=null;
+  function setPill(cls,html){pill.className='pill pillx '+cls;pill.innerHTML=html;pill.classList.remove('pop');void pill.offsetWidth;pill.classList.add('pop');refresh()}
+  function reset(){clearTimeout(timer);setPill('p-pend','<span class="dot"></span>Awaiting payment');prog.style.width='20%';prog.style.backgroundColor='';msg.textContent="The buyer hasn't paid yet."}
+  function run(ok){clearTimeout(timer);setPill('p-neutral','<span class="spin" style="width:12px;height:12px;border-width:1.5px"></span>Processing');prog.style.width='45%';prog.style.backgroundColor='';msg.textContent='Waiting for payment confirmation…';
+    timer=setTimeout(function(){ if(ok){setPill('p-sec',icon('lock')+'Payment secured');prog.style.width='60%';msg.textContent='Next: the seller delivers.'}
+      else{setPill('p-fail',icon('x')+'Payment failed');prog.style.width='45%';prog.style.backgroundColor='var(--u-danger)';msg.textContent='The payment failed. The buyer can try again from the same link.'} },900)}
+  document.getElementById('stOk').onclick=function(){run(true)};
+  document.getElementById('stFail').onclick=function(){run(false)};
+  document.getElementById('stReset').onclick=reset;
+
+  // button feedback
+  var bf=document.getElementById('bfBtn'),toast=document.getElementById('toast'),busy=false;
+  bf.onclick=function(){ if(busy) return; busy=true; bf.innerHTML='<span class="spin" aria-hidden="true"></span>Creating…'; bf.setAttribute('aria-busy','true');
+    setTimeout(function(){ bf.innerHTML='<i data-lucide="check" class="ic"></i>Link created'; refresh(); toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); bf.textContent='Create payment link'; bf.removeAttribute('aria-busy'); busy=false; },2200)},1000)};
+
+  // dropdown
+  var ddb=document.getElementById('ddBtn'),dd=document.getElementById('dd');
+  ddb.onclick=function(e){e.stopPropagation();var o=dd.classList.toggle('open');ddb.setAttribute('aria-expanded',o)};
+  dd.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');ddb.setAttribute('aria-expanded','false')});
+  document.addEventListener('click',function(){dd.classList.remove('open');ddb.setAttribute('aria-expanded','false')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){dd.classList.remove('open');ddb.setAttribute('aria-expanded','false');md.classList.remove('open')}});
+
+  // modal
+  var md=document.getElementById('md');
+  document.getElementById('mdBtn').onclick=function(){md.classList.add('open');setTimeout(function(){document.getElementById('mdKeep').focus({preventScroll:true})},50)};
+  ['mdKeep','mdGo','mdBack'].forEach(function(id){document.getElementById(id).onclick=function(){md.classList.remove('open');document.getElementById('mdBtn').focus({preventScroll:true})}});
+
+  // skeleton
+  var sk=document.getElementById('skBox');
+  var rows=[['Raffia basket set (3)','185,000','p-sec','Secured'],['Kitenge dress, size M','95,000','p-pend','Awaiting'],['Screen replacement','60,000','p-done','Completed']];
+  function real(){sk.innerHTML=rows.map(function(r,i){return '<div class="fadein" style="animation-delay:'+(i*40)+'ms;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px"><span>'+r[0]+'</span><span class="row" style="gap:8px"><b class="tnum">'+r[1]+'</b><span class="pill '+r[2]+'" style="height:20px;font-size:11px">'+r[3]+'</span></span></div>'}).join('')}
+  function skel(){sk.innerHTML=[0,1,2].map(function(){return '<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;height:20px"><span class="skel" style="width:46%"></span><span class="skel" style="width:28%"></span></div>'}).join('')}
+  real();
+  document.getElementById('skBtn').onclick=function(){skel();setTimeout(real,1300)};
+
+  // tabs page transition
+  var tabs=document.querySelectorAll('[data-pg]'),pgs=document.querySelectorAll('.pagebox .pg');
+  tabs.forEach(function(t){t.onclick=function(){var n=+t.dataset.pg;tabs.forEach(function(x,i){x.classList.toggle('on',i===n);x.setAttribute('aria-selected',i===n)});
+    pgs.forEach(function(p,i){p.setAttribute('aria-hidden',i!==n);p.classList.toggle('out',i<n)})}});
+
+  // durations
+  var dur=document.getElementById('dur');
+  function setW(){dur.querySelectorAll('.track').forEach(function(t){t.style.setProperty('--w',t.clientWidth+'px')})}
+  setW(); window.addEventListener('resize',setW);
+  document.getElementById('durBtn').onclick=function(){setW();dur.classList.toggle('go')};
+})();
+</script>

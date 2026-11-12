@@ -1,0 +1,162 @@
+@import "tailwindcss";
+/* The approved design tokens are the single source of truth. */
+@import "../../design-system/tokens.css";
+
+/* next/font exposes the self-hosted families as --font-bricolage / --font-instrument / --font-plex. */
+:root {
+  --font-display: var(--font-bricolage), "Instrument Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-body: var(--font-instrument), ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-plex), ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+/* Tailwind utilities mapped onto the tokens (names chosen to avoid clashing with token names). */
+@theme inline {
+  --color-navy: var(--pl-navy);
+  --color-navy-700: var(--pl-navy-700);
+  --color-navy-900: var(--pl-navy-900);
+  --color-navy-950: var(--pl-navy-950);
+  --color-emerald: var(--pl-emerald);
+  --color-emerald-50: var(--pl-emerald-50);
+  --color-emerald-100: var(--pl-emerald-100);
+  --color-emerald-700: var(--pl-emerald-700);
+  --color-cloud: var(--pl-cloud);
+  --color-page: var(--color-bg);
+  --color-card: var(--color-surface);
+  --color-sunken: var(--color-surface-sunken);
+  --color-ink: var(--color-text);
+  --color-ink-2: var(--color-text-secondary);
+  --color-ink-3: var(--color-text-tertiary);
+  --color-line: var(--color-border);
+  --color-line-soft: var(--color-border-soft);
+  --color-slate-300: var(--pl-slate-300);
+  --color-danger: var(--pl-danger);
+  --color-danger-bg: var(--pl-danger-bg);
+  --color-warn: var(--pl-warning);
+  --color-warn-bg: var(--pl-warning-bg);
+  --color-warn-line: var(--demo-border);
+  --color-info: var(--pl-info);
+  --color-info-bg: var(--pl-info-bg);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --shadow-xs: 0 1px 2px rgba(20, 43, 69, 0.06);
+  --shadow-sm: 0 2px 6px -1px rgba(20, 43, 69, 0.08), 0 1px 2px rgba(20, 43, 69, 0.05);
+  --shadow-md: 0 8px 24px -8px rgba(20, 43, 69, 0.16), 0 2px 6px -2px rgba(20, 43, 69, 0.06);
+  --shadow-lg: 0 24px 48px -16px rgba(20, 43, 69, 0.24);
+
+  --text-overline: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-input: 1rem;
+  --text-h4: 1.0625rem;
+  --text-h3: 1.25rem;
+  --text-h2: 1.5rem;
+  --text-h1: 2rem;
+  --text-display: 2.5rem;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--pl-emerald);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--pl-emerald-100);
+  }
+}
+
+/* Overlay motion: backdrop fades, sheet rises on phones, modal lifts 8px on larger screens. */
+@keyframes pl-fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pl-fade-out { from { opacity: 1 } to { opacity: 0 } }
+@keyframes pl-sheet-in { from { transform: translateY(100%) } to { transform: translateY(0) } }
+@keyframes pl-sheet-out { from { transform: translateY(0) } to { transform: translateY(100%) } }
+@keyframes pl-modal-in { from { opacity: 0; translate: 0 8px; scale: 0.98 } to { opacity: 1; translate: 0 0; scale: 1 } }
+@keyframes pl-modal-out { from { opacity: 1; translate: 0 0; scale: 1 } to { opacity: 0; translate: 0 8px; scale: 0.98 } }
+@keyframes pl-pop { from { transform: scale(0.9); opacity: 0.4 } to { transform: none; opacity: 1 } }
+@keyframes pl-shimmer { to { background-position: -200% 0 } }
+
+.pl-overlay[data-state="open"] { animation: pl-fade-in var(--dur-slow) var(--ease-out) }
+.pl-overlay[data-state="closed"] { animation: pl-fade-out var(--dur-base) var(--ease-out) }
+.pl-sheet[data-state="open"] { animation: pl-sheet-in var(--dur-slow) var(--ease-out) }
+.pl-sheet[data-state="closed"] { animation: pl-sheet-out var(--dur-base) var(--ease-in) }
+@media (min-width: 640px) {
+  .pl-sheet[data-state="open"] { animation: pl-modal-in var(--dur-slow) var(--ease-out) }
+  .pl-sheet[data-state="closed"] { animation: pl-modal-out var(--dur-base) var(--ease-out) }
+}
+.pl-pop { animation: pl-pop var(--dur-slow) var(--ease-out) }
+.pl-skeleton {
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--color-surface-sunken) 0%, #f6f8fb 50%, var(--color-surface-sunken) 100%);
+  background-size: 200% 100%;
+  animation: pl-shimmer 1.3s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pl-skeleton { animation: none }
+}
+
+@layer components {
+  .pl-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%234A5F78' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+  }
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+  }
+  .ref {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  .page-gutter {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 768px) {
+    .page-gutter {
+      padding-left: max(24px, env(safe-area-inset-left, 0px));
+      padding-right: max(24px, env(safe-area-inset-right, 0px));
+    }
+  }
+  @media (min-width: 1024px) {
+    .page-gutter {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+}
